@@ -29,7 +29,7 @@ export default function Header() {
       >
         <div className="shadow-lg bg-white p-6 rounded-2xl text-center space-y-4">
           <div className='flex items-center justify-center space-x-2'>
-            <h2 className="text-2xl font-semibold text-blue-500">Hello {userData? userData.name : 'dd'}, and welcome back!</h2>
+            <h2 className="text-2xl font-semibold text-blue-500">Hello {userData? userData.name : ''}, and welcome back!</h2>
             <img src={assets.hand_wave} className='w-6 h-6 inline' alt="" />
           </div>
         
