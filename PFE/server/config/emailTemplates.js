@@ -3,7 +3,7 @@ export const EMAIL_VERIFY_TEMPLATE = `
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-  <title>Email Verify</title>
+  <title>Email Verification</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,6 +31,11 @@ export const EMAIL_VERIFY_TEMPLATE = `
       padding: 48px 30px 40px;
       color: #000000;
     }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
 
     .button {
       width: 100%;
@@ -43,12 +48,14 @@ export const EMAIL_VERIFY_TEMPLATE = `
       text-align: center;
       font-weight: bold;
       border-radius: 7px;
+      align-items:center;
     }
 
     @media only screen and (max-width: 480px) {
       .container {
         width: 80% !important;
       }
+
 
       .button {
         width: 50% !important;
@@ -90,8 +97,12 @@ export const EMAIL_VERIFY_TEMPLATE = `
                       </tr>
                       <tr>
                         <td style="padding: 0 0 10px; font-size: 14px; line-height: 150%;">
-                          This OTP is valid for 24 hours.
+                          This OTP is valid for the next 10 minutes.
                         </td>
+                      </tr>
+                      <tr>
+                        
+                         <td class="footer">Best regards, <br> <strong>Tunisie Telecom</strong></td>
                       </tr>
                     </tbody>
                   </table>
@@ -201,8 +212,9 @@ export const PASSWORD_RESET_TEMPLATE = `
                       </tr>
                       <tr>
                         <td style="padding: 0 0 10px; font-size: 14px; line-height: 150%;">
-                          The password reset otp is only valid for the next 15 minutes.
+                          The password reset otp is only valid for the next 10 minutes.
                         </td>
+                        
                       </tr>
                     </tbody>
                   </table>
@@ -217,4 +229,67 @@ export const PASSWORD_RESET_TEMPLATE = `
 </body>
 </html>
 `
-
+export const WELCOME_EMAIL_TEMPLATE =`
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to TT Recrut System</title>
+    <style>
+        title {
+          font-size : 20px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            background-color: #ffffff;
+            padding: 20px;
+            margin: auto;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+        }
+        .message {
+            font-size: 16px;
+            color: #555;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .footer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to <strong>TT Recrut System</strong> 🚀</h2>
+        <p class="message">Hi <strong>{{name}}</strong>,</p>
+        <p class="message">We’re thrilled to have you on board! With TT Recrut System, finding top talent has never been easier.</p>
+        <p class="message">Here’s what you can do right now:</p>
+        <ul style="text-align: left; display: inline-block;">
+            <li>🔹 AI-driven candidate matching</li>
+            <li>🔹 Automated recruitment workflows</li>
+            <li>🔹 Data-driven hiring insights</li>
+        </ul>
+        <p class="footer">Best regards, <br> <strong>TT Recrut System Team</strong></p>
+    </div>
+</body>
+</html>
+`
