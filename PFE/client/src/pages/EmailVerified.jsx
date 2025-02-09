@@ -50,6 +50,7 @@ const onSubmitHandler = async(e)=> {
   }
 }
 //to prevent the user from going to /verify-email when he is already verfied
+
 useEffect(()=>{
   isLoggedIn && userData && userData.isVerified && navigate('/')
 },[isLoggedIn,userData])

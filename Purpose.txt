@@ -1,0 +1,23 @@
+Purpose:
+
+    This useEffect ensures that whenever the isLoggedIn or userData state changes, the user will be automatically redirected to the / route (home page) if:
+        The user is logged in (isLoggedIn is true).
+        The userData object exists and is not null or undefined.
+        The userData.isVerified field is true.
+
+Dependencies:
+
+    The dependency array [isLoggedIn, userData] specifies that this effect should run whenever the isLoggedIn or userData values change.
+
+Conditions:
+
+    isLoggedIn && userData && userData.isVerified: This condition is evaluated as follows:
+        isLoggedIn: The user must be logged in (true).
+        userData: The userData object must exist.
+        userData.isVerified: The userData object must have an isVerified property that is true.
+
+If all conditions are true, the navigate('/') function is called to redirect the user to the home page (/).
+
+Effect Function:
+
+    If the conditions are met, navigate('/') is executed. Otherwise, no action is taken
