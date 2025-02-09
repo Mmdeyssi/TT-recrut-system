@@ -112,8 +112,8 @@ export const sendVerifyOtp = async(req,res)=>{
             from:  process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Verify your Email',
-            //text: `Your OTP is ${otp} . Verify your account using this otp`,
-            html : EMAIL_VERIFY_TEMPLATE.replace("{{otp}}",otp).replace("{{email}}",email)
+            text: `Your OTP is ${otp} . Verify your account using this otp`,
+            //html : EMAIL_VERIFY_TEMPLATE.replace("{{otp}}",otp).replace("{{email}}",email)
             }
             await transporter.sendMail(mailOption);
             return res.json({succes:true,message:"OTP sent to your email"})
