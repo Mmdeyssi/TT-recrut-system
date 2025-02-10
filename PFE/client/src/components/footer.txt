@@ -1,0 +1,82 @@
+import React from "react";
+
+const Footer = () => {
+  return (
+    <footer className="bg-gray-100 py-8 px-6 sm:px-24">
+      <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {/* Logo and Description */}
+        <div>
+          <img src="logo_url_here" alt="TT Logo" className="w-24 mb-4" />
+          <p className="text-gray-700 text-sm">
+            Empowering Tunisia Telecom with smart hiring solutions. Simplifying recruitment with AI-driven tools.
+          </p>
+        </div>
+
+        {/* Quick Links */}
+        <div>
+          <h4 className="text-gray-900 font-semibold mb-4">Quick Links</h4>
+          <ul className="text-gray-700 text-sm space-y-2">
+            <li>
+              <a href="/about" className="hover:text-blue-600">About Us</a>
+            </li>
+            <li>
+              <a href="/jobs" className="hover:text-blue-600">Job Openings</a>
+            </li>
+            <li>
+              <a href="/contact" className="hover:text-blue-600">Contact Us</a>
+            </li>
+            <li>
+              <a href="/privacy" className="hover:text-blue-600">Privacy Policy</a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Contact Information */}
+        <div>
+          <h4 className="text-gray-900 font-semibold mb-4">Contact Us</h4>
+          <ul className="text-gray-700 text-sm space-y-2">
+            <li>
+              📧 <a href="mailto:support@ttrecruitsystem.com" className="hover:text-blue-600">support@ttrecruitsystem.com</a>
+            </li>
+            <li>
+              📞 +216 123 456 789
+            </li>
+            <li>
+              📍 Tunisia Telecom Headquarters, Tunis
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-300 mt-8 pt-4 text-center">
+        <p className="text-gray-600 text-sm">
+          © {new Date().getFullYear()} TT Recruit System. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+    <div className="pr-10 flex items-center space-x-6">
+      
+      <button
+        className="px-5 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300 text-center"
+      >
+        Apply for Job
+      </button>
+  
+      
+      <div className="relative group">
+  <div className="w-10 h-10 flex justify-center items-center text-black text-lg font-bold cursor-pointer hover:text-blue-700 transition duration-300">
+    <img src={assets.notif} alt="" />
+  </div>
+  {/* Notification Dropdown */}
+  <div className="absolute top-12 right-0 z-10 bg-gray-100 text-black rounded-lg shadow-lg hidden group-hover:flex flex-col group-hover:transition-all">
+    <ul className="list-none m-0 p-2 text-sm">
+      <li className="py-2 px-4 hover:bg-gray-200 cursor-pointer rounded-lg">
+        No new notifications
+      </li>
+    </ul>
+  </div>
+</div>

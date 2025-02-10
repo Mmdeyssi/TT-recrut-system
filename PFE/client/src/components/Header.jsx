@@ -8,14 +8,14 @@ export default function Header() {
   return (
     
     
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+    <div className="pb-20 flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="text-center"
       >
-        <h1 className="text-4xl font-bold text-blue-600">Welcome to TT Recrut System</h1>
+        <h1 className="text-4xl font-bold text-blue-600">Welcome to TT Recruit System</h1>
         <p className="text-gray-700 mt-4 text-lg">
           Empowering <span className="font-semibold">Tunisie Telecom</span> with smart hiring solutions.
         </p>
@@ -36,7 +36,7 @@ export default function Header() {
           <p className="text-gray-600">✅ Post and Manage Job Openings</p>
           <p className="text-gray-600">📂 Upload and Track Candidate Applications</p>
           <p className="text-gray-600">🤖 AI-Powered Candidate Matching</p>
-          <p className="text-gray-600 font-medium">Join us in shaping the future of telecommunications!</p>
+          <p className="text-gray-600 font-medium ">Smarter hiring. Better talent. Faster decisions</p>
           
          
         </div>

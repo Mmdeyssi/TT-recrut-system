@@ -5,8 +5,8 @@ import { transporter } from "../config/nodemailer.js";
 import { EMAIL_VERIFY_TEMPLATE , WELCOME_EMAIL_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../config/emailTemplates.js";
 //create user and send welcome email 
 export const register = async(req,res)=>{
-    const {fullName,email,password,age,phone} = req.body;
-    if(!fullName || !email || !password || !age || !phone){
+    const {fullName,email,password,age,phone,role} = req.body;
+    if(!fullName || !email || !password || !age || !phone || !role){
         return res.json({succes:false,message:"Please fill in all fields"});
         
     }
@@ -17,7 +17,7 @@ export const register = async(req,res)=>{
             return res.json({succes:false,message:"Email already in use"});
         }
         const hashPassword = await bcrypt.hash(password,10);
-        const user =new userModel({fullName,email,password :hashPassword,age,phone})
+        const user =new userModel({fullName,email,password :hashPassword,age,phone,role})
         await user.save();
         const token = jwt.sign({id:user._id}, process.env.JWT_SECRET , {expiresIn : '7d'});
         res.cookie('token' , token, {

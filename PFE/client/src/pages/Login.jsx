@@ -15,6 +15,7 @@ const Login = () => {
     const [fullName, setFullname] = useState('');
     const [age, setAge] = useState('');
     const [phone, setPhone] = useState('');
+    const [role , setRole] = useState('')
     
     
     const [email, setEmail] = useState('');
@@ -23,11 +24,20 @@ const Login = () => {
         try{
             e.preventDefault();
             axios.defaults.withCredentials = true
+            const formData = {
+                fullName,
+                age,
+                phone,
+                email ,
+                password,
+                role
+
+            }
             if(state==='Sign Up'){
                
                 
-                const {data} = await axios.post(backendUrl + '/api/auth/register' , {fullName ,age,phone, email ,password})
-                
+                const {data} = await axios.post(backendUrl + '/api/auth/register' , formData)
+                console.log(data)
                 if(data.succes){
                     setIsLoggedin(true)
                     getUserData()
@@ -91,6 +101,17 @@ const Login = () => {
             <input onChange={e => setPassword (e.target.value)} value={password} className='bg-transparent outline-none' type="password" placeholder = "Password"
             /*pattern="[a-z A-Z 0-9]{8,}" title="Must be at least 8 characters with letters and numbers"*/ required />
           </div>
+          {state === 'Sign Up' && (
+         <select
+         value={role}
+         onChange={(e) => setRole(e.target.value)}
+         className="w-full bg-gray-800 text-white p-3 mt-4 rounded-lg focus:outline-none"
+       >
+         <option value="" disabled>Select Your Role</option>
+         <option value="jobSeeker">Job Seeker</option>
+         <option value="employer">Employer</option>
+       </select>
+          )}
           {state === 'Login' && (
              <p onClick={()=>navigate('/reset-password')} className='text-blue-400 cursor-pointer text-xs mt-3'>Forget your Password ? </p>
 

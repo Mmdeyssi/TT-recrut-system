@@ -7,17 +7,21 @@ import hand_wave from './hand_wave.png'
 import header_img from './header_img.png'
 import age from './age.svg'
 import phone from './phone.svg'
+import notif from './notif.png'
+import icon from './TT.jpg'
 
 
 export const assets = {
     arrow_icon,
     lock_icon,
     logo,
+    icon,
     mail_icon,
     person_icon,
     hand_wave,
     header_img,
     age,
-    phone
+    phone,
+    notif
     
 }
