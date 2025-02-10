@@ -46,7 +46,7 @@ const Login = () => {
                     if(userRole === 'employer'){
                         navigate('/admin')
                     }else{
-                        navigate('/')
+                        navigate('/user')
                     }
                     toast.success("Successfull Registration")
                 }else{
@@ -62,7 +62,7 @@ const Login = () => {
                     if(userRole === 'employer'){
                         navigate('/admin')
                     }else{
-                        navigate('/')
+                        navigate('/user')
                     }
                     toast.success("Logged in Successfully")
                     

@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import EmailVerified from './pages/EmailVerified';
 import ResetPassword from './pages/ResetPassword';
 import AdminDashboard from './pages/AdminDashboard';
+import UserDashboard from './pages/UserDashboard';
 
 
 
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/verify-email" element={<EmailVerified/>} />
         <Route path="/reset-password" element={<ResetPassword/>} />
         <Route path="/admin" element={<AdminDashboard/>} />
+        <Route path="/user" element={<UserDashboard/>} />
         
 
       </Routes>

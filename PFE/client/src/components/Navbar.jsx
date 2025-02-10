@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { AppContent } from '../context/AppContext';
@@ -13,9 +13,12 @@ const Navbar = () => {
       try{
         axios.defaults.withCredentials =true
         const {data}=await axios.post(backendUrl + '/api/auth/logout')
-        data.success && setIsLoggedin(false)
-        data.success && setUserData(false)
-        navigate('/login')
+        if(data.succes){
+          setIsLoggedin(false)
+          setUserData(false)
+          navigate('/')
+          
+        }
         
       }catch(err){
         toast.error(err.message)
