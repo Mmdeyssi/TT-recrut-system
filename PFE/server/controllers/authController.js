@@ -67,7 +67,10 @@ export const login = async(req,res)=>{
             sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
              
         });
-        return res.json({succes:true,message:"Logged in successfully"})
+        //send the id and role in the response 
+        return res.json({succes:true,message:"Logged in successfully",user :{
+            role : user.role ,
+        }})
 
     }catch(err){
         res.json({succes:false,message:"err.message"})

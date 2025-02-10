@@ -41,7 +41,13 @@ const Login = () => {
                 if(data.succes){
                     setIsLoggedin(true)
                     getUserData()
-                    navigate('/')
+                    //get the role from the response
+                    const userRole = data.user.role;
+                    if(userRole === 'employer'){
+                        navigate('/admin')
+                    }else{
+                        navigate('/')
+                    }
                     toast.success("Successfull Registration")
                 }else{
                     toast.error(data.message)
@@ -51,8 +57,13 @@ const Login = () => {
                
                 if(data.succes){
                     setIsLoggedin(true)
-                    navigate('/')
                     getUserData()
+                    const userRole = data.user.role;
+                    if(userRole === 'employer'){
+                        navigate('/admin')
+                    }else{
+                        navigate('/')
+                    }
                     toast.success("Logged in Successfully")
                     
                 }else{
