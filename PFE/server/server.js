@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import { connectDB } from "./config/mongodb.js";
 import { authRouter } from "./routes/authRoutes.js";
 import { userRouter } from "./routes/userRoutes.js";
+import jobRouter from "./routes/jobRoutes.js";
+import applicationsRouter from "./routes/jobApplicationsRoutes.js";
 
 
 const app = express();
@@ -18,6 +20,8 @@ app.use(cors({origin : allowed,credentials: true}));
 //api endpoints
 app.use('/api/auth',authRouter); 
 app.use('/api/user',userRouter);
+app.use('/api/jobs',jobRouter)
+app.use('/api/applications',applicationsRouter)
 
 
 app.listen(port,()=> console.log(`server started on Port :${port}`));
