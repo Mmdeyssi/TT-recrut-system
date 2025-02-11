@@ -54,7 +54,8 @@ const Navbar = () => {
             <button
               className="px-6 py-2 mr-10 text-white font-bold rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 shadow-md hover:scale-105 transition-all"
             >
-              Apply for Job
+              
+              {userData.role ==="employer" ? "Add a Job" : "Apply for Job"}
             </button>
     
             {/* Notification Icon */}
