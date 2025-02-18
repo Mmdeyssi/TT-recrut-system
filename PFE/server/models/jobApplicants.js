@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 const jobApplicationSchema = new mongoose.Schema({
     jobId: { type: mongoose.Schema.Types.ObjectId, ref: "Job", required: true }, // Links to job
-    applicantId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Links to applicant
+    applicantId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true }, // Links to applicant
     cv: { type: String, required: true }, // Path to uploaded CV file
+    extractedText: { type: String },
     appliedAt: { type: Date, default: Date.now },
   });
   

@@ -8,7 +8,7 @@ const jobSchema = new mongoose.Schema({
   /*MongoDB automatically assigns a unique _id to every document.
 Instead of storing all employer details inside each job, we only store their _id.
 This creates a relationship between documents (like SQL foreign keys)*/
-  employerId: { type: mongoose.Schema.Types.ObjectId, ref: "users", required: true }, // Employer reference
+  employerId: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true }, // Employer reference
   createdAt: { type: Date, default: Date.now },
 });
 

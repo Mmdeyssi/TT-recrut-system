@@ -1,0 +1,55 @@
+{data} VS res.data : 
+1️⃣ Using { data } = await axios.post() (Destructuring Approach)
+js
+Copy
+Edit
+const { data } = await axios.post("/api/job", jobDetails);
+🔹 What happens here?
+
+axios.post() returns a response object.
+{ data } extracts only the data property from the response.
+Now, data contains only the actual response body, not the full response object.
+Example Response from API
+{
+  "success": true,
+  "message": "Job added successfully",
+  "job": {
+    "id": "12345",
+    "title": "Frontend Developer"
+  }
+}
+
+2️⃣ Using res = await axios.post() (Full Response Object)
+js
+Copy
+Edit
+const res = await axios.post("/api/job", jobDetails);
+console.log(res);
+🔹 What happens here?
+
+res contains the entire response object, not just data.
+🔹 Example Response from API
+
+js
+Copy
+Edit
+{
+  data: {
+    success: true,
+    message: "Job added successfully",
+    job: {
+      id: "12345",
+      title: "Frontend Developer"
+    }
+  },
+  status: 200,
+  statusText: "OK",
+  headers: {...},
+  config: {...},
+  request: {...}
+}
+👉 Use { data } = await axios.post() when you only need the response body.
+👉 Use res = await axios.post() when you need metadata like status, headers, etc.
+
+3/ e.preventDefault();
+->This prevents the page from reloading when the form is submitted.

@@ -9,6 +9,7 @@ import age from './age.svg'
 import phone from './phone.svg'
 import notif from './notif.png'
 import icon from './TT.jpg'
+import job_search_image from './login.jpg'
 
 
 export const assets = {
@@ -22,6 +23,7 @@ export const assets = {
     header_img,
     age,
     phone,
-    notif
+    notif,
+    job_search_image
     
 }

@@ -6,6 +6,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 
+
 const Navbar = () => {
     const navigate = useNavigate();
     const {userData,backendUrl,setUserData,setIsLoggedin,isLoggedIn} = useContext(AppContent)
@@ -40,6 +41,7 @@ const Navbar = () => {
       }
     }
 
+
   return (
       <div className="w-full h-25 flex justify-between items-center p-4 sm:p-6 sm:px-24 absolute top-0 bg-gray shadow-md">
         {/* Logo Section */}
@@ -52,11 +54,12 @@ const Navbar = () => {
           <div className="pr-10 flex items-center space-x-6">
             {/* Apply for Job Button */}
             <button
-              className="px-6 py-2 mr-10 text-white font-bold rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 shadow-md hover:scale-105 transition-all"
+              onClick={()=>{navigate('/jobs')}} className="px-6 py-2 mr-10 text-white font-bold rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 shadow-md hover:scale-105 transition-all"
             >
               
               {userData.role ==="employer" ? "Add a Job" : "Apply for Job"}
             </button>
+
     
             {/* Notification Icon */}
             <div className="relative group pr-10">

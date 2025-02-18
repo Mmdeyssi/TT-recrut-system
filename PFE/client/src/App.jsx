@@ -8,6 +8,9 @@ import EmailVerified from './pages/EmailVerified';
 import ResetPassword from './pages/ResetPassword';
 import AdminDashboard from './pages/AdminDashboard';
 import UserDashboard from './pages/UserDashboard';
+import ApplyJob from './pages/ApplyJob';
+import Popup from './popup/Popup';
+import JobListPage from './pages/JobListPage';
 
 
 
@@ -23,6 +26,7 @@ const App = () => {
         <Route path="/reset-password" element={<ResetPassword/>} />
         <Route path="/admin" element={<AdminDashboard/>} />
         <Route path="/user" element={<UserDashboard/>} />
+        <Route path="/jobs" element={<JobListPage/>} />
         
 
       </Routes>

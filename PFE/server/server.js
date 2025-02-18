@@ -15,6 +15,8 @@ const port =process.env.PORT || 4000;
 connectDB();
 const allowed = ['http://localhost:5173']
 app.use(express.json());
+app.use("/uploads", express.static("uploads/cvs"));
+
 app.use(cookieParser());
 app.use(cors({origin : allowed,credentials: true}));
 //api endpoints
