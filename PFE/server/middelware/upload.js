@@ -1,6 +1,8 @@
 /*multer → Middleware for handling file uploads in Express.
 path → Helps manage file extensions and directory paths.*/ 
 import multer from "multer";
+import fs from "fs/promises";
+
 
 /*destination → Defines where the uploaded files will be stored.
 Saves CVs in the uploads/cvs/ directory.
@@ -37,6 +39,7 @@ its MIME (Multipurpose Internet Mail Extensions) format. */
     fileFilter: fileFilter,
     limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
   });
-  
-  
   // Middleware to extract text from PDF
+
+ 
+  

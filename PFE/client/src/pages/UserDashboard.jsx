@@ -6,7 +6,7 @@ import Footer from '../components/footer'
 const UserDashboard = () => {
   return (
     <div>
-        <Navbar/>
+      <Navbar/>
       <Header/>
       <Footer/>
     </div>

@@ -1,7 +1,7 @@
 import { JobModel } from "../models/jobsModel.js";
 import { JobApplicationModel } from "../models/jobApplicants.js";
 
-// Controller to add a new job
+// Controller to add a new job ✅ 
 export const addJob = async (req, res) => {
   try {
     const { title, description, skillsRequired } = req.body;
@@ -20,7 +20,7 @@ export const addJob = async (req, res) => {
   }
 };
 
-// Controller to get all jobs
+// Controller to get all jobs ✅ 
 export const getAllJobs = async (req, res) => {
   try {
     // Retrieve only required fields: title, description, skillsRequired, employer's name and email, and createdAt
@@ -42,20 +42,22 @@ export const getAllJobs = async (req, res) => {
 // Controller to apply for a job
 export const applyForJob = async (req, res) => {
   try {
-    const { jobId } = req.body;
-    const applicantId =  req.body.userId; // Extract applicant ID from authenticated user
 
+    const { jobId ,coverLetter } = req.body;
+    const applicantId = req.user.id;
+    console.log("id = " + applicantId) // Extract applicant ID from authenticated user
     if (!req.file) {
       return res.status(400).json({ success: false, message: "CV file is required" });
     }
       // Store extracted text from PDF
-    const extractedText = req.body.extractedText || ""
+    //const extractedText = req.body.extractedText || ""
 
     const newApplication = new JobApplicationModel({
       jobId,
       applicantId,
-      cv: req.file.path,
-      extractedText // Store file path
+      cv: req.file.path, // Store file path
+      extractedText,
+      coverLetter 
     });
 
     await newApplication.save();
@@ -89,7 +91,7 @@ export const getUserApplications = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
-// Controller to delete a job
+// Controller to delete a job ✅ 
 export const deleteJob = async (req, res) => {
   try {
     const { jobId } = req.params;

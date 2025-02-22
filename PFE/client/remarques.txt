@@ -1,8 +1,6 @@
 {data} VS res.data : 
 1️⃣ Using { data } = await axios.post() (Destructuring Approach)
-js
-Copy
-Edit
+
 const { data } = await axios.post("/api/job", jobDetails);
 🔹 What happens here?
 
@@ -20,9 +18,6 @@ Example Response from API
 }
 
 2️⃣ Using res = await axios.post() (Full Response Object)
-js
-Copy
-Edit
 const res = await axios.post("/api/job", jobDetails);
 console.log(res);
 🔹 What happens here?
@@ -30,9 +25,6 @@ console.log(res);
 res contains the entire response object, not just data.
 🔹 Example Response from API
 
-js
-Copy
-Edit
 {
   data: {
     success: true,
@@ -53,3 +45,12 @@ Edit
 
 3/ e.preventDefault();
 ->This prevents the page from reloading when the form is submitted.
+
+🔍 Why Use req.body.extractedText?
+Great question! The reason for using req.body.extractedText instead of just extractedText = pdfData.text is to pass the extracted text to the next middleware or controller (applyForJob).
+req.body persists across middlewares:
+When a request flows through multiple middlewares, req.body allows data to be shared between them.
+extractPdfText is a middleware function:
+It processes the file, extracts text, and passes the result to the next function.
+The next function (applyForJob) can access it easily:
+applyForJob does not need to call pdf-parse again, it just reads req.body.extractedText.

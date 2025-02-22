@@ -58,12 +58,7 @@ const Login = () => {
                 if(data.succes){
                     setIsLoggedin(true)
                     getUserData()
-                    const userRole = data.user.role;
-                    if(userRole === 'employer'){
-                        navigate('/admin')
-                    }else{
-                        navigate('/user')
-                    }
+                    navigate('/user')
                     toast.success("Logged in Successfully")
                     
                 }else{
