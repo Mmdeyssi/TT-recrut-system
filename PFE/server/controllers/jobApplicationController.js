@@ -39,13 +39,12 @@ export const getAllJobs = async (req, res) => {
 
 
 
-// Controller to apply for a job
+// Controller to apply for a job ✅ 
 export const applyForJob = async (req, res) => {
   try {
 
-    const { jobId ,coverLetter } = req.body;
-    const applicantId = req.user.id;
-    console.log("id = " + applicantId) // Extract applicant ID from authenticated user
+    const { jobId ,coverLetter,extractedText } = req.body;
+    const applicantId = req.user.id; // Extract applicant ID from authenticated user
     if (!req.file) {
       return res.status(400).json({ success: false, message: "CV file is required" });
     }
@@ -84,7 +83,7 @@ export const getJobApplications = async (req, res) => {
 // Controller to get all jobs an applicant has applied for
 export const getUserApplications = async (req, res) => {
   try {
-    const applicantId = req.body.id;
+    const applicantId = req.user.id;
     const appliedJobs = await JobApplicationModel.find({ applicantId }).populate("jobId", "title description skillsRequired");
     res.status(200).json({ success: true, appliedJobs });
   } catch (error) {
