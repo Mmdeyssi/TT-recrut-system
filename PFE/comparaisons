@@ -1,0 +1,32 @@
+FCM vs NativeNotify => we gonna use nativeNotify
+Both NativeNotify and Firebase offer real-time notification services, but which one to choose depends on your project requirements. Here's a comparison to help you decide:
+
+1. Firebase Cloud Messaging (FCM)
+   ✅ Pros:
+
+Free and scalable.
+Well-integrated with Firebase Auth, Firestore, and Analytics.
+Works across multiple platforms (Web, Android, iOS).
+Supports both push and in-app messaging.
+Advanced targeting and automation.
+❌ Cons:
+
+Requires setup with Firebase SDK.
+Can be complex if you need advanced features like topic-based notifications. 2. NativeNotify
+✅ Pros:
+
+Easier to implement than Firebase.
+Provides real-time notifications with simple integration.
+Supports cross-platform notifications with minimal setup.
+Built-in notification history and analytics.
+❌ Cons:
+
+Less flexible and customizable than Firebase.
+May not scale as well for very large applications.
+Which One Should You Choose?
+If you want a simple and fast setup for notifications, NativeNotify is a good choice.
+If you're already using Firebase for authentication or database, or need scalability and more control, Firebase Cloud Messaging (FCM) is better.
+📌 Recommendation for Your Project (TT Recrut System)
+Since your project is already using MongoDB and MERN stack, Firebase might not be a natural fit unless you integrate it separately. If you want a quick and easy solution, go for NativeNotify. If you prefer full control and scalability, use Firebase FCM.
+
+Would you like a step-by-step guide for implementation?

@@ -11,6 +11,7 @@ import UserDashboard from './pages/UserDashboard';
 import ApplyJob from './pages/ApplyJob';
 import Popup from './popup/Popup';
 import JobListPage from './pages/JobListPage';
+import AboutUs from './pages/AboutUs';
 
 
 
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/reset-password" element={<ResetPassword/>} />
         <Route path="/user" element={<UserDashboard/>} />
         <Route path="/jobs" element={<JobListPage/>} />
+        <Route path="/about" element={<AboutUs/>} />
         
 
       </Routes>

@@ -9,7 +9,17 @@ import age from './age.svg'
 import phone from './phone.svg'
 import notif from './notif.png'
 import icon from './TT.jpg'
-import job_search_image from './login.jpg'
+import home1 from './home1.jpg'
+import home2 from './home2.jpg'
+import home3 from './home3.jpg'
+import home4 from './home4.jpg'
+import home5 from './home5.jpg'
+import home6 from './home6.jpg'
+import home8 from './home8.jpg'
+import home9 from './home9.jpg'
+import team1 from './1.jpg'
+import team2 from './2.jpg'
+import team3 from './3.jpg'
 
 
 export const assets = {
@@ -24,6 +34,18 @@ export const assets = {
     age,
     phone,
     notif,
-    job_search_image
+    home1,
+    home2,
+    home3,
+    home4,
+    team1,
+    team2,
+    team3,
+    home5,
+    home6,
+   
+    home8,
+    home9
+
     
 }

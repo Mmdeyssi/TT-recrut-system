@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Spice&family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
 
+
 * {
-  font-family: "Outfit", serif;
+  font-family: "Playwrite IT Moderna", cursive;
+
 }
