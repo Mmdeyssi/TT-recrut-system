@@ -19,7 +19,7 @@ export const register = async(req,res)=>{
         const hashPassword = await bcrypt.hash(password,10);
         const user =new userModel({fullName,email,password :hashPassword,age,phone,role})
         await user.save();
-        const token = jwt.sign({id:user._id}, process.env.JWT_SECRET , {expiresIn : '7d'});
+        const token = jwt.sign({id:user._id , role: user.role }, process.env.JWT_SECRET , {expiresIn : '7d'});
         res.cookie('token' , token, {
             httpOnly: true,
             secure : true, 
@@ -59,7 +59,7 @@ export const login = async(req,res)=>{
         if(!isMatch){
             return res.json({succes:false,message:"Invalid Password"})
         }
-        const token = jwt.sign({id:user._id}, process.env.JWT_SECRET , {expiresIn:'7d'})
+        const token = jwt.sign({id:user._id, role: user.role }, process.env.JWT_SECRET , {expiresIn:'7d'})
         res.cookie('token' , token, {
             httpOnly: true,
             secure : process.env.NODE_ENV=== 'production', //secure when in production (use https)

@@ -1,4 +1,5 @@
-FCM vs NativeNotify => we gonna use nativeNotify
+FCM vs NativeNotify => we gonna use FCM because we have a standard react app with vite nott a native react app so we are not using expo and installing expo just to use nativeNotification will break the project and will cause issues .
+
 Both NativeNotify and Firebase offer real-time notification services, but which one to choose depends on your project requirements. Here's a comparison to help you decide:
 
 1. Firebase Cloud Messaging (FCM)

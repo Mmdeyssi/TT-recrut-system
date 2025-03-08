@@ -5,7 +5,7 @@ import { JobApplicationModel } from "../models/jobApplicants.js";
 export const addJob = async (req, res) => {
   try {
     const { title, description, skillsRequired } = req.body;
-    const employerId =  req.body.userId;// Extract employer ID from authenticated user
+    const employerId =  req.user.id;// Extract employer ID from authenticated user
 
     if (!title || !description || !skillsRequired) {
       return res.json({ success: false, message: "All fields are required" });
@@ -102,7 +102,7 @@ export const deleteJob = async (req, res) => {
     }
 
     // Ensure only the employer who posted the job can delete it
-    if (job.employerId.toString() !== req.body.userId) {
+    if (job.employerId.toString() !== req.user.id) {
       return res.status(403).json({ success: false, message: "Unauthorized to delete this job" });
     }
     

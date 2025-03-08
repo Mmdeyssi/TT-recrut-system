@@ -32,11 +32,14 @@ const LandingPage = () => {
   transition={{ duration: 0.8 }}
   className="relative w-full h-screen flex items-center"
 >
+  
   <img 
     src={assets.home4} 
     className="absolute top-0 left-0 w-full h-full object-cover" 
     alt="" 
   />
+  
+
   
   {/* Text Container */}
   <div className="relative z-10 max-w-2xl text-left ml-10 text-white">

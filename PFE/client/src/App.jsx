@@ -8,8 +8,7 @@ import EmailVerified from './pages/EmailVerified';
 import ResetPassword from './pages/ResetPassword';
 
 import UserDashboard from './pages/UserDashboard';
-import ApplyJob from './pages/ApplyJob';
-import Popup from './popup/Popup';
+
 import JobListPage from './pages/JobListPage';
 import AboutUs from './pages/AboutUs';
 

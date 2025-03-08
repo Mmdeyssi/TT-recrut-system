@@ -41,13 +41,9 @@ const Login = () => {
                 if(data.succes){
                     setIsLoggedin(true)
                     getUserData()
-                    //get the role from the response
-                    const userRole = data.user.role;
-                    if(userRole === 'employer'){
-                        navigate('/admin')
-                    }else{
+                    
                         navigate('/user')
-                    }
+                    
                     toast.success("Successfull Registration")
                 }else{
                     toast.error(data.message)
