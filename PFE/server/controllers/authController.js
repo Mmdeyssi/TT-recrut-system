@@ -3,21 +3,48 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { transporter } from "../config/nodemailer.js";
 import { EMAIL_VERIFY_TEMPLATE , WELCOME_EMAIL_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../config/emailTemplates.js";
+import cloudinary from "../config/cloudinary.js";
+import getDataUri from "../config/datauri.js";
 //create user and send welcome email 
 export const register = async(req,res)=>{
-    const {fullName,email,password,age,phone,role} = req.body;
-    if(!fullName || !email || !password || !age || !phone || !role){
-        return res.json({succes:false,message:"Please fill in all fields"});
-        
-    }
-    if(age<18) return res.json({succes:false,message:"You must be at least 18"})
+
     try{
+        //if i let role decalred as const i get  Assignment to constant variable error 
+        const {fullName,email,password,age,phone,recruiterCode,role:originalRole} = req.body;
+        let role=originalRole;
+        if(!fullName || !email || !password || !age || !phone ||!role ){
+            return res.json({succes:false,message:"Please fill in all fields"});
+            
+        }
+        if(age<18) return res.json({succes:false,message:"You must be at least 18"})
+            if (!req.file) {
+                return res.json({ success: false, message: "Profile photo is required" });
+            }            
+            const file = req.file;
+        const fileUri = getDataUri(file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
         const existingUser = await userModel.findOne({email});
         if(existingUser){
             return res.json({succes:false,message:"Email already in use"});
         }
+        if (recruiterCode) {
+            if (recruiterCode === process.env.RECRUITER_CODE) {
+              role = "employer";
+            } else {
+              return res.json({ success: false, message: "Invalid recruiter code" });
+            }
+          }
         const hashPassword = await bcrypt.hash(password,10);
-        const user =new userModel({fullName,email,password :hashPassword,age,phone,role})
+        const user =new userModel({fullName,
+            email,
+            password :hashPassword,
+            age,
+            phone,
+            role,
+            recruiterCode: role === "employer" ? recruiterCode : null,
+            profile:{
+                profilePhoto:cloudResponse.secure_url,
+            }        })
         await user.save();
         const token = jwt.sign({id:user._id , role: user.role }, process.env.JWT_SECRET , {expiresIn : '7d'});
         res.cookie('token' , token, {
@@ -69,7 +96,7 @@ export const login = async(req,res)=>{
         });
         //send the id and role in the response 
         return res.json({succes:true,message:"Logged in successfully",user :{
-            role : user.role ,
+            user
         }})
 
     }catch(err){
@@ -97,6 +124,55 @@ export const isAuthenticated =async(req,res)=>{
 
     }catch(err){
         res.json({succes:false,message:err.message})
+    }
+}
+export const updateProfile = async (req, res) => {
+    try {
+        const { fullName, email, phone, bio, skills } = req.body;
+        // cloudinary ayega idhar
+        const formattedSkills = Array.isArray(skills) ? skills : skills.split(",").map(skill => skill.trim());
+        const userId = req.user.id; // middleware authentication
+        let user = await userModel.findById(userId);
+
+        if (!user) {
+            return res.status(400).json({
+                message: "User not found.",
+                success: false
+            })
+        }
+        // updating data
+        if(fullName) user.fullName = fullName
+        if(email) user.email = email
+        if(phone)  user.phone = phone
+        if(bio) user.profile.bio = bio
+        if(skills) user.profile.skills = formattedSkills
+        
+        // resume comes later here...
+        if (req.file) {
+            user.profile.resume = `http://localhost:4000/${req.file.path}`; // Save resume file path
+            console.log(req.file.path)
+            user.profile.resumeOriginalName = req.file.originalname; // Save original filename
+        }
+
+
+        await user.save();
+
+        user = {
+            _id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            phone: user.phone,
+            role: user.role,
+            profile: user.profile
+        }
+
+        return res.status(200).json({
+            message:"Profile updated successfully.",
+            user,
+            success:true
+        })
+    } catch (error) {
+        console.log(error);
     }
 }
 //send verification OTP to the user's Email

@@ -6,7 +6,6 @@ const employerCheck = (req, res, next) => {
       }
       // Check if user has employer role
       if (req.user.role !== "employer") {
-        console.log(req.user.role)
         return res.status(403).json({ 
           message: "Forbidden: Employer privileges required" 
         });

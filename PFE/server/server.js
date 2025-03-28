@@ -7,13 +7,18 @@ import { connectDB } from "./config/mongodb.js";
 import { authRouter } from "./routes/authRoutes.js";
 import { userRouter } from "./routes/userRoutes.js";
 import jobRouter from "./routes/jobRoutes.js";
-import applicationsRouter from "./routes/jobApplicationsRoutes.js";
+import path from "path";
+import { fileURLToPath } from "url";
+import appRouter from "./routes/appRouter.js";
+
 
 
 const app = express();
 const port =process.env.PORT || 4000;
 connectDB();
 const allowed = ['http://localhost:5173']
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use("/uploads", express.static("uploads/cvs"));
 
@@ -22,8 +27,10 @@ app.use(cors({origin : allowed,credentials: true}));
 //api endpoints
 app.use('/api/auth',authRouter); 
 app.use('/api/user',userRouter);
-app.use('/api/jobs',jobRouter)
-app.use('/api/applications',applicationsRouter)
+app.use('/api/jobs',jobRouter);
+app.use('/api/application',appRouter);
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
 
 
 app.listen(port,()=> console.log(`server started on Port :${port}`));

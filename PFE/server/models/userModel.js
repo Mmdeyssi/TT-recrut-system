@@ -6,13 +6,24 @@ const userSchema=new mongoose.Schema({
     age:{type:Number,required:true},
     phone:{type:String,required:true},
     //enum Ensures that the role can only be "jobSeeker" or "employer", preventing invalid values.
-    role: { type: String, enum: ["jobSeeker", "employer"], required: true },
+    role: { type: String, default:"jobSeeker"},
+    profile:{
+        bio:{type:String},
+        skills: { type: [String]},
+        resume:{type:String}, // URL to resume file
+        resumeOriginalName:{type:String},
+        profilePhoto:{
+            type:String,
+            default:""
+        }
+    },
     verifyOtp:{type:String,default:''},
     otpExpireAt:{type:String,default:0},
     isVerified:{type:Boolean,default:false},
     resetOtp:{type:String,default:''},
     resetOtpExpireAt:{type:String,default:0},
+    recruiterCode: { type: String, default: null }
 
 
-})
+},{timestamps:true})
 export const userModel=mongoose.model('user',userSchema)

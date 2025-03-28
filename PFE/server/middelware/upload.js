@@ -40,6 +40,9 @@ its MIME (Multipurpose Internet Mail Extensions) format. */
     fileFilter: fileFilter,
     limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
   });
+
+  const storageImage = multer.memoryStorage();
+  export const singleUpload = multer({storageImage});
   // Middleware to extract text from PDF
 
   
