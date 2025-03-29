@@ -1,53 +1,84 @@
 import React, { useEffect, useState } from "react";
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
 import { useDispatch } from "react-redux";
-import { setSearchedQuery } from "@/redux/JobSlice";
+import { setFilterQuery } from "@/redux/JobSlice";
 
-const fitlerData = [
+const filterData = [
   {
-    fitlerType: "Location",
-    array: ["Tunisia Lac ", "Tunisia Cun", "Nabeul", "Sousse", "Gabes"],
+    filterType: "Location",
+    array: ["Tunisia", "Tunisia Cun", "Nabeul", "Sousse", "Gabes"],
   },
   {
-    fitlerType: "Industry",
-    array: ["Frontend Developer", "Backend Developer", "FullStack Developer"],
+    filterType: "Industry",
+    array: ["Fronteend Developer", "Backend Developer", "FullStack Developer"],
   },
   {
-    fitlerType: "Salary",
-    array: ["0-40k", "42-1lakh", "1lakh to 5lakh"],
+    filterType: "Salary",
+    array: ["1500 LPA", "42-1lakh", "1lakh to 5lakh"],
   },
 ];
 
 const FilterCard = () => {
-  const [selectedValue, setSelectedValue] = useState("");
+  const [selectedFilters, setSelectedFilters] = useState({});
   const dispatch = useDispatch();
-  const changeHandler = (value) => {
-    setSelectedValue(value);
+
+  const toggleFilter = (type, value) => {
+    setSelectedFilters((prev) => {
+      const currentSelections = prev[type] || [];
+
+      const updatedSelections = currentSelections.includes(value)
+        ? currentSelections.filter((item) => item !== value)
+        : [...currentSelections, value];
+
+      return {
+        ...prev,
+        [type]: updatedSelections,
+      };
+    });
   };
+  /*Runs every time filters change.
+
+Object.values(selectedFilters) gives you all the arrays (per category).
+
+.flat() merges them into a single array.
+
+.join(" ") turns it into a query string:
+"Tunisia Sousse Backend Developer" */
   useEffect(() => {
-    dispatch(setSearchedQuery(selectedValue));
-  }, [selectedValue]);
+    // You can combine all selected filters into a string or custom logic
+    const allSelectedValues = Object.values(selectedFilters).flat();
+    dispatch(setFilterQuery(allSelectedValues)); // ✅ just the array
+  }, [selectedFilters]);
+
   return (
-    <div className="w-full bg-white p-3 rounded-md">
-      <h1 className="font-bold text-lg">Filter Jobs</h1>
-      <hr className="mt-3" />
-      <RadioGroup value={selectedValue} onValueChange={changeHandler}>
-        {fitlerData.map((data, index) => (
-          <div>
-            <h1 className="font-bold text-lg">{data.fitlerType}</h1>
-            {data.array.map((item, idx) => {
-              const itemId = `id${index}-${idx}`;
-              return (
-                <div className="flex items-center space-x-2 my-2">
-                  <RadioGroupItem value={item} id={itemId} />
-                  <Label htmlFor={itemId}>{item}</Label>
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </RadioGroup>
+    <div className="w-full bg-white p-3 rounded-md shadow">
+      <h1 className="font-bold text-lg mb-4">Filter Jobs</h1>
+      {filterData.map((section, index) => (
+        <div key={index} className="mb-4">
+          <h2 className="font-semibold text-md text-gray-700 mb-2">
+            {section.filterType}
+          </h2>
+          {section.array.map((item, idx) => {
+            const itemId = `filter-${index}-${idx}`;
+            const isChecked =
+              selectedFilters[section.filterType]?.includes(item) || false;
+
+            return (
+              <div className="flex items-center space-x-2 my-1" key={itemId}>
+                <Checkbox
+                  id={itemId}
+                  checked={isChecked}
+                  onCheckedChange={() => toggleFilter(section.filterType, item)}
+                />
+                <Label htmlFor={itemId} className="text-sm text-gray-600">
+                  {item}
+                </Label>
+              </div>
+            );
+          })}
+        </div>
+      ))}
     </div>
   );
 };

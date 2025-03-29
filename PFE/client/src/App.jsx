@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
@@ -13,8 +13,18 @@ import Jobs from "./pages/Jobs";
 import Profile from "./pages/Profile";
 import JobDescription from "./pages/JobDescription";
 import Home from "./pages/Home";
+import { AppContent } from "./context/AppContext";
 
 const App = () => {
+  const { loading } = useContext(AppContent);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white text-gray-600 text-lg">
+        Loading...
+      </div>
+    );
+  }
   return (
     <div>
       <ToastContainer />

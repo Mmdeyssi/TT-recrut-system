@@ -50,36 +50,38 @@ const JobDescription = () => {
           `${backendUrl}/api/jobs/search-job/${jobId}`,
           { withCredentials: true }
         );
+
         if (data.success) {
           dispatch(setSingleJob(data.job));
-          const applied = data.job.applications.some(
-            (application) => application.applicant === userData?._id
-          );
-          setIsApplied(applied);
+
+          if (userData?._id) {
+            const applied = data.job.applications.some(
+              (application) => application.applicant === userData?._id
+            );
+            setIsApplied(applied);
+          }
         }
       } catch (error) {
-        console.log(error);
+        console.log("Error fetching job:", error.message);
       }
     };
 
-    if (userData?._id) {
-      fetchSingleJob();
-    }
+    fetchSingleJob();
   }, [jobId, dispatch, userData?._id]);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 my-10">
-      {/* Back to Home Button */}
+      {/* Back to Jobs */}
       <div className="mb-6">
         <button
-          onClick={() => navigate("/")}
-          className="inline-flex items-center gap-2 bg-gradient-to-r from-green-400 to-green-600 text-white px-5 py-2 rounded-full font-semibold shadow-md transition "
+          onClick={() => navigate("/jobs")}
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-green-400 to-green-600 text-white px-5 py-2 rounded-full font-semibold shadow-md transition"
         >
-          ⬅ Back to Home
+          ⬅ Back
         </button>
       </div>
 
-      {/* Header Section */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold mb-2">
@@ -111,11 +113,10 @@ const JobDescription = () => {
         </Button>
       </div>
 
-      {/* Job Description */}
-      <h2 className="border-b-2 border-gray-300 text-xl font-semibold mt-10 mb-4">
-        Job Description
-      </h2>
+      {/* Separator */}
+      <div className="border-b-2 border-gray-300 text-xl font-semibold mt-10 mb-4"></div>
 
+      {/* Job Details */}
       <div className="space-y-3 text-base text-gray-700">
         <p>
           <strong>Role:</strong> {singleJob?.title}
@@ -127,13 +128,23 @@ const JobDescription = () => {
           <strong>Description:</strong> {singleJob?.description}
         </p>
         <p>
-          <strong>Experience:</strong> {singleJob?.experience} yrs
+          <strong>Experience:</strong> {singleJob?.experienceLevel} yrs
         </p>
         <p>
           <strong>Salary:</strong> {singleJob?.salary} LPA
         </p>
+
+        {/* ✅ Skills Required */}
         <p>
-          <strong>Total Applicants:</strong> {singleJob?.applications?.length}
+          <strong>Skills Required:</strong>{" "}
+          {singleJob?.skillsRequired?.length > 0
+            ? singleJob.skillsRequired.join(", ")
+            : "Not specified"}
+        </p>
+
+        <p>
+          <strong>Total Applicants:</strong>{" "}
+          {singleJob?.applications?.length || 0}
         </p>
         <p>
           <strong>Posted Date:</strong> {singleJob?.createdAt?.split("T")[0]}

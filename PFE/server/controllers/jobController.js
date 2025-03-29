@@ -15,14 +15,15 @@ export const addJob = async (req, res) => {
     const job = await Job.create({
       title,
       description,
-      skillsRequired: skillsRequired.split(","),
+      skillsRequired: skillsRequired,
       salary: Number(salary),
       position:Number(position),
       location,
       experienceLevel: experience,
       jobType : jobType,
       created_by: employerId
-  });    
+  });   
+ 
 
     res.json({ success: true, message: "Job added successfully", job});
   } catch (error) {
@@ -94,7 +95,7 @@ export const getJobs = async (req, res) => {
   try {
     // Retrieve only required fields: title, description, skillsRequired, employer's name and email, and createdAt
     const jobs = await Job.find()
-      .select("title description skillsRequired createdAt")
+    
       
 
     res.status(200).json({
