@@ -5,7 +5,7 @@ import { setSingleJob } from "@/redux/JobSlice";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const JobDescription = () => {
@@ -14,6 +14,7 @@ const JobDescription = () => {
   const dispatch = useDispatch();
   const { id: jobId } = useParams();
   const [isApplied, setIsApplied] = useState(false);
+  const navigate = useNavigate();
 
   const applyJobHandler = async () => {
     try {
@@ -68,6 +69,17 @@ const JobDescription = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 my-10">
+      {/* Back to Home Button */}
+      <div className="mb-6">
+        <button
+          onClick={() => navigate("/")}
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-green-400 to-green-600 text-white px-5 py-2 rounded-full font-semibold shadow-md transition "
+        >
+          ⬅ Back to Home
+        </button>
+      </div>
+
+      {/* Header Section */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold mb-2">
@@ -99,6 +111,7 @@ const JobDescription = () => {
         </Button>
       </div>
 
+      {/* Job Description */}
       <h2 className="border-b-2 border-gray-300 text-xl font-semibold mt-10 mb-4">
         Job Description
       </h2>

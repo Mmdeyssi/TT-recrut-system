@@ -13,17 +13,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { userData, backendUrl, setUserData, setIsLoggedin, isLoggedIn } =
     useContext(AppContent);
-  const [isScrolled, setIsScrolled] = useState(false);
+
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > window.innerHeight / 2);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const logout = async () => {
     try {
@@ -58,13 +49,10 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-6 left-1/2 transform -translate-x-1/2 w-[90%] max-w-6xl px-6 py-4 z-50 rounded-xl transition-all duration-300 ${
-        isScrolled
-          ? "bg-white text-gray-800 shadow-lg"
-          : "bg-gradient-to-r from-yellow-300 via-yellow-100 to-blue-50 shadow-md"
-      }`}
+      className="fixed top-5 left-1/2  -translate-x-1/2 w-[90%] max-w-6xl px-6 py-4 z-50 rounded-xl 
+         bg-white/30 backdrop-blur-md  shadow-md"
     >
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center ">
         {/* Logo */}
         <div className="text-xl sm:text-2xl font-bold">TT Recrut System</div>
 
