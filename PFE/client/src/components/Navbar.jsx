@@ -57,31 +57,51 @@ const Navbar = () => {
         <div className="text-xl sm:text-2xl font-bold">TT Recrut System</div>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex space-x-8 font-medium">
-          <Link to="/" className="hover:underline">
-            Home
-          </Link>
-          <Link to="/jobs" className="hover:underline">
-            Jobs
-          </Link>
-          <Link to="/about" className="hover:underline">
-            About Us
-          </Link>
-        </div>
+        {userData.role === "jobSeeker" && (
+          <>
+            <div className="hidden md:flex space-x-8 font-medium">
+              <Link to="/" className="hover:underline">
+                Home
+              </Link>
+              <Link to="/jobs" className="hover:underline">
+                Jobs
+              </Link>
+              <Link to="/about" className="hover:underline">
+                About Us
+              </Link>
+            </div>
 
-        {/* Hamburger menu */}
-        <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)}>
-            {menuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
+            {/* Hamburger menu */}
+            <div className="md:hidden">
+              <button onClick={() => setMenuOpen(!menuOpen)}>
+                {menuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </>
+        )}
+        {userData.role === "employer" && (
+          <>
+            <div className="hidden md:flex space-x-8 font-medium">
+              <Link to="/admin-jobs" className="hover:underline">
+                Manage Jobs
+              </Link>
+              <Link to="/jobs" className="hover:underline">
+                Jobs
+              </Link>
+            </div>
+          </>
+        )}
 
         {/* Right section - buttons and avatar */}
         <div className="hidden md:flex items-center space-x-6">
           {userData ? (
             <>
               <button
-                onClick={() => navigate("/jobs")}
+                onClick={() =>
+                  navigate(
+                    userData.role === "employer" ? "/admin-jobs" : "/jobs"
+                  )
+                }
                 className="px-6 py-2 text-white font-bold rounded-lg bg-yellow-400 shadow-md hover:bg-yellow-500"
               >
                 {userData.role === "employer" ? "Add a Job" : "Apply for Job"}
@@ -106,9 +126,11 @@ const Navbar = () => {
                       </Avatar>
                       <div>
                         <h4 className="font-medium">{userData.name}</h4>
-                        <p className="text-sm text-muted-foreground max-w-[200px] truncate">
-                          {userData?.profile?.bio || "No bio available"}
-                        </p>
+                        {userData.role === "jobSeeker" && (
+                          <p className="text-sm text-muted-foreground max-w-[200px] truncate">
+                            {userData?.profile?.bio || "No bio available"}
+                          </p>
+                        )}
                       </div>
                     </div>
                     <div className="flex flex-col my-2 text-gray-600">

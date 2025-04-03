@@ -5,11 +5,9 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { useNavigate } from "react-router-dom";
 import { assets } from "@/assets/assets";
-import { setSingleJob } from "@/redux/JobSlice";
 
 const Job = ({ job }) => {
   const navigate = useNavigate();
-  console.log("job", job);
 
   const daysAgoFunction = (mongodbTime) => {
     const createdAt = new Date(mongodbTime);
@@ -19,7 +17,7 @@ const Job = ({ job }) => {
   };
 
   return (
-    <div className="p-5 rounded-md shadow-xl bg-white border border-gray-100">
+    <div className="p-5 rounded-md shadow-xl bg-white border border-gray-100 w-full h-[380px] flex flex-col justify-between max-w-sm">
       {/* Top Info */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-gray-500">
@@ -46,15 +44,15 @@ const Job = ({ job }) => {
       </div>
 
       {/* Job Info */}
-      <div>
+      <div className="mb-3">
         <h1 className="font-bold text-lg my-2">{job?.title}</h1>
-        <p className="text-sm text-gray-600 line-clamp-3 mb-2">
+        <p className="text-sm text-gray-600 line-clamp-3">
           {job?.description || "No description provided."}
         </p>
       </div>
 
       {/* Badges */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex items-center gap-2 whitespace-nowrap overflow-hidden text-ellipsis mb-4">
         <Badge className="text-blue-700 font-bold" variant="ghost">
           {job?.position} Positions
         </Badge>
@@ -62,17 +60,17 @@ const Job = ({ job }) => {
           {job?.jobType}
         </Badge>
         <Badge className="text-[#7209b7] font-bold" variant="ghost">
-          {job?.salary} LPA
+          {job?.salary} DNT
         </Badge>
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center gap-4 mt-4">
+      <div className="flex items-center gap-4 mt-auto">
         <Button
           onClick={() => navigate(`/description/${job._id}`)}
           variant="outline"
         >
-          Details
+          Show more..
         </Button>
         <Button className="bg-[#7209b7] hover:bg-[#5e2b9e] text-white">
           Save For Later

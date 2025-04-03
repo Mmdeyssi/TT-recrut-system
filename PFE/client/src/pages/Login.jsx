@@ -36,11 +36,9 @@ const Login = () => {
           backendUrl + "/api/auth/register",
           formData
         );
-        console.log(data);
         if (data.succes) {
           setIsLoggedin(true);
           getUserData();
-
           navigate("/");
 
           toast.success("Successfull Registration");

@@ -129,7 +129,7 @@ export const isAuthenticated =async(req,res)=>{
 export const updateProfile = async (req, res) => {
     try {
         const { fullName, email, phone, bio, skills } = req.body;
-        // cloudinary ayega idhar
+        
         const formattedSkills = Array.isArray(skills) ? skills : skills.split(",").map(skill => skill.trim());
         const userId = req.user.id; // middleware authentication
         let user = await userModel.findById(userId);

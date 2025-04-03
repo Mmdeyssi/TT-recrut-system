@@ -16,10 +16,13 @@ const Jobs = () => {
 
   const [filteredJobs, setFilteredJobs] = useState(allJobs);
 
+  // LIFTED filter state
+  const [selectedFilters, setSelectedFilters] = useState({});
+
   useEffect(() => {
     let jobs = [...allJobs];
 
-    // 1. Filter by searchQuery from Hero
+    // 1. Filter by searchQuery
     if (searchedQuery && typeof searchedQuery === "string") {
       const lowerQuery = searchedQuery.toLowerCase();
       jobs = jobs.filter((job) =>
@@ -44,10 +47,16 @@ const Jobs = () => {
     setFilteredJobs(jobs);
   }, [allJobs, searchedQuery, filterQuery]);
 
+  // Handle clearing
   const clearFilters = () => {
     dispatch(setSearchedQuery(""));
     dispatch(setFilterQuery([]));
+    setSelectedFilters({}); // clears checkbox UI
   };
+
+  useEffect(() => {
+    setFilteredJobs(allJobs);
+  }, [allJobs]);
 
   return (
     <div>
@@ -66,7 +75,10 @@ const Jobs = () => {
 
         <div className="flex flex-col lg:flex-row gap-5">
           <div className="w-full lg:w-1/4">
-            <FilterCard />
+            <FilterCard
+              selectedFilters={selectedFilters}
+              setSelectedFilters={setSelectedFilters}
+            />
           </div>
 
           <div className="w-full lg:w-3/4 h-[88vh] overflow-y-auto pb-5">

@@ -54,9 +54,11 @@ const JobDescription = () => {
         if (data.success) {
           dispatch(setSingleJob(data.job));
 
-          if (userData?._id) {
+          if (userData?.userId) {
             const applied = data.job.applications.some(
-              (application) => application.applicant === userData?._id
+              (application) =>
+                application.applicant?.toString() ===
+                userData?.userId?.toString()
             );
             setIsApplied(applied);
           }
@@ -95,7 +97,7 @@ const JobDescription = () => {
               {singleJob?.jobType}
             </Badge>
             <Badge className="text-[#7209b7] font-bold" variant="ghost">
-              {singleJob?.salary} LPA
+              {singleJob?.salary} DNT
             </Badge>
           </div>
         </div>
@@ -131,7 +133,7 @@ const JobDescription = () => {
           <strong>Experience:</strong> {singleJob?.experienceLevel} yrs
         </p>
         <p>
-          <strong>Salary:</strong> {singleJob?.salary} LPA
+          <strong>Salary:</strong> {singleJob?.salary} DNT
         </p>
 
         {/* ✅ Skills Required */}

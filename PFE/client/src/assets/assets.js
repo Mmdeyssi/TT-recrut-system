@@ -21,6 +21,7 @@ import home9 from './home9.jpg'
 import team1 from './1.jpg'
 import team2 from './2.jpg'
 import team3 from './3.jpg'
+import bg_img from './bg_img.png'
 
 
 export const assets = {
@@ -46,7 +47,8 @@ export const assets = {
     home6,
    home7,
     home8,
-    home9
+    home9,
+    bg_img
 
     
 }

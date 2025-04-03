@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setSearchedQuery } from "@/redux/JobSlice";
 import CategoryCarousel from "./CategoryCarousel";
+import { assets } from "@/assets/assets";
 
 const HeroSection = () => {
   const [query, setQuery] = useState("");
