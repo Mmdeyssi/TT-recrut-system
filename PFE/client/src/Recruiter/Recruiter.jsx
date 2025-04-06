@@ -12,6 +12,7 @@ import { AppContent } from "@/context/AppContext";
 
 import { Trash2, PencilLine, UsersRound, Plus } from "lucide-react";
 import EditJobModal from "@/components/EditJob";
+import { useNavigate } from "react-router-dom";
 
 const RecruiterJobList = () => {
   const { allAdminJobs } = useSelector((state) => state.job);
@@ -19,6 +20,7 @@ const RecruiterJobList = () => {
   const [addOpen, setAddOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false); // ✅ for edit modal
   const { backendUrl } = useContext(AppContent);
+  const navigate = useNavigate();
 
   useGetAllAdminJobs();
 
@@ -88,7 +90,7 @@ const RecruiterJobList = () => {
                   <Button
                     variant="outline"
                     className="flex items-center gap-2"
-                    onClick={() => console.log("View applicants")}
+                    onClick={() => navigate(`/application/${job._id}`)}
                   >
                     <UsersRound size={16} />
                     View Applicants

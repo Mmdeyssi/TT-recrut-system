@@ -1,6 +1,7 @@
 import { Application } from "../models/jobApplicants.js";
 import { Job } from "../models/jobsModel.js";
-
+import {  STATUS_ACCEPTED_TEMPLATE,STATUS_REJECTED_TEMPLATE} from "../config/emailTemplates.js"
+import { transporter } from "../config/nodemailer.js";
 // Controller to apply for a job ✅ 
 export const applyJob = async (req, res) => {
   try {
@@ -53,6 +54,7 @@ export const getAppliedJobs = async (req,res) => {
       const application = await Application.find({applicant:userId}).sort({createdAt:-1}).populate({
           path:'job',
           options:{sort:{createdAt:-1}},
+          select:"title , created_by , applications"
           
       });
       if(!application){
@@ -71,13 +73,20 @@ export const getAppliedJobs = async (req,res) => {
 }
 export const getApplicants = async (req,res) => {
   try {
-      const jobId = req.params.id;
-      const job = await Job.findById(jobId).populate({
+      const {jobId} = req.params;
+      const job = await Job.findById(jobId)
+      .select("title created_by")
+      .populate({
+        
           path:'applications',
           options:{sort:{createdAt:-1}},
           populate:{
-              path:'applicant'
-          }
+              path:'applicant',
+              select: "fullName email phone profile"
+              
+             
+          },
+          
       });
       if(!job){
           return res.status(404).json({
@@ -93,36 +102,44 @@ export const getApplicants = async (req,res) => {
       console.log(error);
   }
 }
-export const updateStatus = async (req,res) => {
+// controllers/applicationController.js
+export const updateStatus = async (req, res) => {
     try {
-        const {status} = req.body;
-        const applicationId = req.params.id;
-        if(!status){
-            return res.status(400).json({
-                message:'status is required',
-                success:false
-            })
-        };
-
-        // find the application by applicantion id
-        const application = await Application.findOne({_id:applicationId});
-        if(!application){
-            return res.status(404).json({
-                message:"Application not found.",
-                success:false
-            })
-        };
-
-        // update the status
-        application.status = status.toLowerCase();
-        await application.save();
-
-        return res.status(200).json({
-            message:"Status updated successfully.",
-            success:true
-        });
-
-    } catch (error) {
-        console.log(error);
+      const { id } = req.params;
+      const { status } = req.body;
+  
+      const application = await Application.findById(id).populate("applicant");
+      if (!application) {
+        return res.status(404).json({ success: false, message: "Application not found" });
+      }
+  
+      application.status = status;
+      await application.save();
+  
+      const { email, fullName } = application.applicant;
+  
+      
+  
+      const htmlTemplate =
+        status === "accepted"
+          ? STATUS_ACCEPTED_TEMPLATE.replace("{{name}}", fullName)
+          : STATUS_REJECTED_TEMPLATE.replace("{{name}}", fullName);
+  
+          const mailOptions = {
+            from: process.env.SENDER_EMAIL,
+            to: email,
+            subject:
+              status === "accepted"
+                ? "🎉 You're In! Application Accepted"
+                : "Application Status Update",
+            html: htmlTemplate,
+          };
+      
+          await transporter.sendMail(mailOptions);
+  
+      return res.status(200).json({ success: true, message: "Status updated and email sent." });
+    } catch (err) {
+      console.error("Email/Status update failed:", err);
+      return res.status(500).json({ success: false, message: "Something went wrong." });
     }
 }

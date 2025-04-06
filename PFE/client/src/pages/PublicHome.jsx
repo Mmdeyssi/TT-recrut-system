@@ -49,7 +49,7 @@ const LandingPage = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative w-full min-h-[90vh] flex flex-col justify-center px-4 sm:px-10 lg:flex-row items-center"
+        className="relative w-full min-h-[90vh] flex flex-col  px-4 sm:px-10 lg:flex-row items-center"
       >
         <img
           src={assets.home4}
@@ -58,27 +58,24 @@ const LandingPage = () => {
         />
 
         {/* Text Container */}
-        <div className="relative z-10 max-w-2xl text-center lg:text-left text-white">
+        <div className="relative z-10 max-w-2xl text-left text-white">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#272343]"
+            className="text-4xl sm:text-5xl lg:text-6xl font-bold text-[#1F2937]" // Updated color
           >
-            The Future of{" "}
-            <span className="italic font-semibold">Recruitment</span> Starts
-            Here
+            Your Dream Job Is Just One Match Away
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3, duration: 1 }}
-            className="mt-6 mb-6 text-base sm:text-lg text-[#2d334a]"
+            className="mt-6 mb-8 text-base sm:text-lg text-[#2d334a]"
           >
-            TT Recrut System connects top talent with leading companies <br />
-            using advanced AI-powered matching technology. <br />
-            Find the perfect job or the ideal candidate effortlessly.
+            AI-powered precision. Human-first experience. <br />
+            Discover tailored job opportunities that truly fit.
           </motion.p>
 
           <div className="mt-6 w-full max-w-2xl mx-auto bg-white shadow-lg rounded-full flex items-center px-4 py-2">
@@ -102,40 +99,6 @@ const LandingPage = () => {
       </motion.div>
 
       {/* Text Content */}
-
-      {/* New Section */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        className="text-gray-800 py-16 px-4 sm:px-8 lg:px-20 flex flex-wrap items-center justify-between"
-      >
-        <div className="w-full md:w-1/2 mb-10 md:mb-0">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-light leading-tight">
-            Recruitment is evolving.
-            <br />
-            <span className="italic font-semibold">Are you ready?</span>
-          </h2>
-        </div>
-        <div className="w-full md:w-1/2">
-          <p className="text-base sm:text-lg font-light text-gray-700">
-            Our understanding of what leads to effective hiring is constantly
-            updating. So, shouldn’t recruitment be changing too?
-          </p>
-          <p className="mt-4 text-base sm:text-lg font-light text-gray-700">
-            Traditional recruitment systems rely on outdated methods, leading to
-            inefficiencies and missed opportunities. TT Recrut System leverages
-            AI to streamline hiring, ensuring a perfect fit between candidates
-            and employers.
-          </p>
-        </div>
-      </motion.div>
-
-      <img
-        src={assets.home9}
-        alt="Service Visual"
-        className="w-full h-auto max-h-[500px] object-cover mt-10 mb-10 block shadow-md rounded-md"
-      />
 
       {/* Services Section */}
       <motion.div

@@ -93,11 +93,9 @@ export const login = async(req,res)=>{
             maxAge  : 7*24*60*60*1000, //en ms 
             sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict',
              
-        });
-        //send the id and role in the response 
-        return res.json({succes:true,message:"Logged in successfully",user :{
-            user
-        }})
+        }); 
+        return res.json({succes:true,message:"Logged in successfully",user : user
+        })
 
     }catch(err){
         res.json({succes:false,message:"err.message"})

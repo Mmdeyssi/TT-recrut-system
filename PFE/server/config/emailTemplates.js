@@ -293,3 +293,23 @@ export const WELCOME_EMAIL_TEMPLATE =`
 </body>
 </html>
 `
+export const STATUS_ACCEPTED_TEMPLATE = `
+  <div style="font-family:Arial,sans-serif;">
+    <h2>🎉 Congratulations, {{name}}!</h2>
+    <p>Your job application has been <strong>accepted</strong>.</p>
+    <p>We will contact you soon with further details. Stay tuned!</p>
+    <br/>
+    <p style="color:gray;">TT Recruit Team</p>
+  </div>
+`;
+
+export const STATUS_REJECTED_TEMPLATE = `
+  <div style="font-family:Arial,sans-serif;">
+    <h2>Hi {{name}},</h2>
+    <p>Thank you for applying, but we regret to inform you that your application was <strong>not selected</strong>.</p>
+    <p>We encourage you to apply for future openings.</p>
+    <br/>
+    <p style="color:gray;">TT Recruit Team</p>
+  </div>
+`;
+

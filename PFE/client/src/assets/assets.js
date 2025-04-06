@@ -12,7 +12,7 @@ import icon from './TT.jpg'
 import home1 from './home1.jpg'
 import home2 from './home2.jpg'
 import home3 from './home3.jpg'
-import home4 from './home4.jpg'
+//import home4 from './home4.jpg'
 import home5 from './home5.jpg'
 import home6 from './home6.jpg'
 import home7 from './home7.jpg'
@@ -22,6 +22,7 @@ import team1 from './1.jpg'
 import team2 from './2.jpg'
 import team3 from './3.jpg'
 import bg_img from './bg_img.png'
+import home4 from './home4.jpg'
 
 
 export const assets = {

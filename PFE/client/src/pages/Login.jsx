@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 
@@ -7,45 +7,66 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { AppContent } from "../context/AppContext";
 
+import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+
+import { FaKey } from "react-icons/fa";
+
 const Login = () => {
   const navigate = useNavigate();
-  const { backendUrl, setIsLoggedin, getUserData } = useContext(AppContent);
+  const { backendUrl, setIsLoggedin, getUserData, userData } =
+    useContext(AppContent);
   //using useState hook // state = 'login' , setState = function to update(change) the state
   const [state, setState] = useState("Login");
+  const [loading, setLoading] = useState(false);
   const [fullName, setFullname] = useState("");
   const [age, setAge] = useState("");
   const [phone, setPhone] = useState("");
-  const [role, setRole] = useState("");
-
+  const [recruiterCode, setRecruiterCode] = useState("");
+  const [photo, setPhoto] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+  const handleRecruiterCodeChange = (e) => {
+    setRecruiterCode(e.target.value);
+  };
+
   const onSubmitHandler = async (e) => {
     try {
       e.preventDefault();
       axios.defaults.withCredentials = true;
-      const formData = {
-        fullName,
-        age,
-        phone,
-        email,
-        password,
-        role,
-      };
+      const formData = new FormData();
+      formData.append("fullName", fullName);
+      formData.append("email", email);
+      formData.append("password", password);
+      formData.append("age", age);
+      formData.append("phone", phone);
+      formData.append("role", role);
+      formData.append("recruiterCode", recruiterCode);
+      formData.append("profilePhoto", photo);
       if (state === "Sign Up") {
+        setLoading(true);
         const { data } = await axios.post(
           backendUrl + "/api/auth/register",
           formData
         );
+
         if (data.succes) {
           setIsLoggedin(true);
           getUserData();
-          navigate("/");
+          if (userData.role === "employer") {
+            navigate("/admin-jobs");
+          } else {
+            navigate("/");
+          }
 
           toast.success("Successfull Registration");
         } else {
           toast.error(data.message);
         }
       } else {
+        setLoading(true);
         const { data } = await axios.post(backendUrl + "/api/auth/login", {
           email,
           password,
@@ -54,7 +75,11 @@ const Login = () => {
         if (data.succes) {
           setIsLoggedin(true);
           getUserData();
-          navigate("/");
+          if (userData.role === "employer") {
+            navigate("/admin-jobs");
+          } else {
+            navigate("/");
+          }
           toast.success("Logged in Successfully");
         } else {
           toast.error(data.message);
@@ -62,6 +87,18 @@ const Login = () => {
       }
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file && file.type.startsWith("image/")) {
+      setPhoto(file);
+    } else {
+      alert("Only image files are allowed.");
+      setPhoto(null);
     }
   };
 
@@ -146,18 +183,48 @@ const Login = () => {
             />
           </div>
           {state === "Sign Up" && (
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full bg-gray-800 text-white p-3 mt-4 rounded-lg focus:outline-none"
-            >
-              <option value="" disabled>
-                Select Your Role
-              </option>
-              <option value="jobSeeker">Job Seeker</option>
-              <option value="employer">Employer</option>
-            </select>
+            <>
+              <div className="flex items-center gap-2 mt-4">
+                <Label>Profile</Label>
+                <input
+                  accept="image/*"
+                  type="file"
+                  name="profilePhoto"
+                  onChange={handleFileChange}
+                  className="cursor-pointer text-white"
+                />
+              </div>
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="w-full bg-gray-800 text-white p-3 mt-4 rounded-lg focus:outline-none"
+              >
+                <option value="" disabled>
+                  Select Your Role
+                </option>
+                <option value="jobSeeker">Job Seeker</option>
+                <option value="employer">Employer</option>
+              </select>
+
+              {role === "employer" && (
+                <>
+                  <div className="relative flex items-center bg-gray-800 rounded-lg p-2 mt-4">
+                    <FaKey className="text-gray-400 ml-2" />
+                    <input
+                      type="text"
+                      name="recruiterCode"
+                      placeholder="Enter Recruiter Code"
+                      onChange={handleRecruiterCodeChange}
+                      value={recruiterCode}
+                      className="w-full bg-transparent border-none text-white focus:outline-none ml-2"
+                      required
+                    />
+                  </div>
+                </>
+              )}
+            </>
           )}
+
           {state === "Login" && (
             <p
               onClick={() => navigate("/reset-password")}
@@ -166,10 +233,19 @@ const Login = () => {
               Forget your Password ?{" "}
             </p>
           )}
-
-          <button className="w-full py-2.5 mt-5 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium">
-            {state === "Sign Up" ? "Sign Up" : "Login"}{" "}
-          </button>
+          {loading ? (
+            <Button className="w-full py-2.5 mt-5 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium'">
+              {" "}
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="w-full py-2.5 mt-5 rounded-full bg-gradient-to-r from-indigo-500 to-indigo-900 text-white font-medium"
+            >
+              {state === "Sign Up" ? "Sign Up" : "Login"}
+            </Button>
+          )}
         </form>
         {state === "Sign Up" ? (
           <p className="text-gray-400 text-center text-xs mt-4">

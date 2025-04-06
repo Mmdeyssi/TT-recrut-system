@@ -1,5 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import jobSlice from "./JobSlice"
+import applicationSlice from "./applicationSlice"
 import {
     persistStore,
     persistReducer,
@@ -11,13 +12,15 @@ import {
     REGISTER,
   } from 'redux-persist'
   import storage from 'redux-persist/lib/storage'
+import Applicants from "@/Recruiter/viewApplications";
   const persistConfig = {
     key: 'root',
     version: 1,
     storage,
   }
   const rootReducer = combineReducers({
-    job:jobSlice
+    job:jobSlice,
+    application:applicationSlice
   })
   
   const persistedReducer = persistReducer(persistConfig, rootReducer)
