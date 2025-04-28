@@ -21,7 +21,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use(express.json());
 app.use("/uploads", express.static("uploads/cvs"));
-
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ success: false, message: "Internal server error." });
+  });
+  
 app.use(cookieParser());
 app.use(cors({origin : allowed,credentials: true}));
 //api endpoints

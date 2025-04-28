@@ -8,6 +8,7 @@ import { LogOut, Mail, User2, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import AuthModal from "@/pages/AuthModal";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -17,14 +18,14 @@ const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [authOpen, setAuthOpen] = useState(false);
 
-  // Scroll detection effect
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
-        setShowNavbar(false); // scrolling down
+        setShowNavbar(false);
       } else {
-        setShowNavbar(true); // scrolling up
+        setShowNavbar(true);
       }
       setLastScrollY(window.scrollY);
     };
@@ -71,32 +72,9 @@ const Navbar = () => {
       }`}
     >
       <div className="flex justify-between items-center">
-        {/* Logo */}
         <div className="text-xl sm:text-2xl font-bold">TT Recrut System</div>
 
-        {/* Desktop Links */}
-        {userData?.role === "jobSeeker" && (
-          <>
-            <div className="hidden md:flex space-x-8 font-medium">
-              <Link to="/" className="hover:underline">
-                Home
-              </Link>
-              <Link to="/jobs" className="hover:underline">
-                Jobs
-              </Link>
-              <Link to="/about" className="hover:underline">
-                About Us
-              </Link>
-            </div>
-            <div className="md:hidden">
-              <button onClick={() => setMenuOpen(!menuOpen)}>
-                {menuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
-          </>
-        )}
-
-        {userData?.role === "employer" && (
+        {userData.role === "employer" ? (
           <div className="hidden md:flex space-x-8 font-medium">
             <Link to="/admin-jobs" className="hover:underline">
               Manage Jobs
@@ -105,9 +83,26 @@ const Navbar = () => {
               Jobs
             </Link>
           </div>
+        ) : (
+          <div className="hidden md:flex space-x-8 font-medium">
+            <Link to="/" className="hover:underline">
+              Home
+            </Link>
+            <Link to="/jobs" className="hover:underline">
+              Jobs
+            </Link>
+            <Link to="/about" className="hover:underline">
+              About Us
+            </Link>
+          </div>
         )}
 
-        {/* Right section - buttons and avatar */}
+        <div className="md:hidden">
+          <button onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
         <div className="hidden md:flex items-center space-x-6">
           {userData ? (
             <>
@@ -117,7 +112,7 @@ const Navbar = () => {
                     userData.role === "employer" ? "/admin-jobs" : "/jobs"
                   )
                 }
-                className="px-6 py-2 text-white font-bold rounded-lg bg-yellow-400 shadow-md hover:bg-yellow-500"
+                className="px-6 py-2 text-white font-bold rounded-lg bg-green-400 shadow-md hover:bg-green-500"
               >
                 {userData.role === "employer" ? "Add a Job" : "Apply for Job"}
               </button>
@@ -180,17 +175,18 @@ const Navbar = () => {
             </>
           ) : (
             <button
-              onClick={() => navigate("/login")}
-              className="bg-yellow-400 text-black px-6 py-2 rounded-lg shadow-md hover:shadow-[0_0_20px_5px_rgba(255,165,0,0.6)] flex items-center gap-2"
+              onClick={() => setAuthOpen(true)}
+              className="bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:shadow-[0_0_20px_5px_rgba(45,106,79,0.4)]
+ flex items-center gap-2"
             >
               Login
               <img src={assets.arrow_icon} alt="arrow" className="w-3 h-3" />
             </button>
           )}
+          <AuthModal open={authOpen} setOpen={setAuthOpen} />
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden mt-4 space-y-3 flex flex-col text-lg font-medium">
           <Link
@@ -214,26 +210,85 @@ const Navbar = () => {
           >
             About Us
           </Link>
+
           {!userData ? (
             <button
               onClick={() => {
-                navigate("/login");
+                setAuthOpen(true);
                 setMenuOpen(false);
               }}
-              className="bg-yellow-400 text-black px-4 py-2 rounded-lg"
+              className="bg-green-600 text-black px-4 py-2 rounded-lg"
             >
               Login
             </button>
           ) : (
-            <button
-              onClick={() => {
-                navigate("/jobs");
-                setMenuOpen(false);
-              }}
-              className="px-4 py-2 text-white font-bold rounded-lg bg-yellow-400"
-            >
-              {userData.role === "employer" ? "Add a Job" : "Apply for Job"}
-            </button>
+            <>
+              <button
+                onClick={() => {
+                  navigate("/jobs");
+                  setMenuOpen(false);
+                }}
+                className="px-4 py-2 text-white font-bold rounded-lg bg-yellow-400"
+              >
+                {userData.role === "employer" ? "Add a Job" : "Apply for Job"}
+              </button>
+
+              <div className="flex flex-col gap-3 mt-4">
+                <div className="flex items-center gap-3">
+                  <Avatar className="w-10 h-10">
+                    <AvatarImage
+                      src={userData.profile?.profilePhoto}
+                      alt="@profile"
+                    />
+                  </Avatar>
+                  <div>
+                    <h4 className="font-medium text-sm">{userData.name}</h4>
+                    {userData.role === "jobSeeker" && (
+                      <p className="text-xs text-muted-foreground truncate max-w-[180px]">
+                        {userData?.profile?.bio || "No bio available"}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {userData.role === "jobSeeker" && (
+                  <Button
+                    variant="link"
+                    className="w-fit text-left px-0"
+                    onClick={() => {
+                      navigate("/profile");
+                      setMenuOpen(false);
+                    }}
+                  >
+                    View Profile
+                  </Button>
+                )}
+
+                {!userData.isVerified && (
+                  <Button
+                    variant="link"
+                    className="w-fit text-left px-0"
+                    onClick={() => {
+                      sendVerificationOtp();
+                      setMenuOpen(false);
+                    }}
+                  >
+                    Verify Email
+                  </Button>
+                )}
+
+                <Button
+                  variant="link"
+                  className="w-fit text-left px-0 text-red-600"
+                  onClick={() => {
+                    logout();
+                    setMenuOpen(false);
+                  }}
+                >
+                  Logout
+                </Button>
+              </div>
+            </>
           )}
         </div>
       )}

@@ -1,115 +1,180 @@
-import React, { useContext, useState } from 'react'
-import { assets } from '../assets/assets'
-import { useNavigate } from 'react-router-dom'
-import { AppContent } from '../context/AppContext'
-import axios from 'axios'
-import { toast } from 'react-toastify'
+import React, { useContext, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { AppContent } from "../context/AppContext";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Mail, Lock } from "lucide-react";
+
 const ResetPassword = () => {
-   const {backendUrl} = useContext(AppContent)
-   axios.defaults.withCredentials =true
-  const navigate = useNavigate()
-  const [email , setEmail] = useState('')
-  const [newPassword , setNewPassword] = useState('')
-  const[isEmailSent , setIsEmailSent] = useState('')
-  const[otp , setOtp] = useState(0)
-  const[isOtpSubmitted , setIsOtpSubmitted] = useState(false)
-  const inputRefs = React.useRef([])
-  //to pass to the next input firld automatically 
-  const handelInput = (e ,index)=>{
-    if(e.target.value.length >0 && index<inputRefs.current.length -1 ){
-      inputRefs.current[index+1].focus()
+  const { backendUrl } = useContext(AppContent);
+  axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
+
+  const [email, setEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [isEmailSent, setIsEmailSent] = useState(false);
+  const [otp, setOtp] = useState(0);
+  const [isOtpSubmitted, setIsOtpSubmitted] = useState(false);
+
+  const inputRefs = useRef([]);
+
+  const handleInput = (e, index) => {
+    if (e.target.value.length > 0 && index < inputRefs.current.length - 1) {
+      inputRefs.current[index + 1].focus();
     }
-  }
-  //to delete the input using backspace
-  const handleKeyDown = (e,index)=>{
-    if(e.key === 'Backspace' && e.target.value === '' && index>0){
-      inputRefs.current[index-1].focus()
-  }
-}
-const handlePaste = (e) => {
-  const paste = e.clipboardData.getData('text');
-  const pasteArray = paste.split('');
-  pasteArray.forEach((char, index) => {
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && e.target.value === "" && index > 0) {
+      inputRefs.current[index - 1].focus();
+    }
+  };
+
+  const handlePaste = (e) => {
+    const paste = e.clipboardData.getData("text");
+    const pasteArray = paste.split("");
+    pasteArray.forEach((char, index) => {
       if (inputRefs.current[index]) {
-          inputRefs.current[index].value = char;
-          
+        inputRefs.current[index].value = char;
       }
-  });
-};
-const onSubmitEmail = async (e)=> {
-  e.preventDefault()
-  try{
-    const {data} = await axios.post(backendUrl +'/api/auth/send-reset-otp' , {email})
-    data.succes ? toast.success(data.message) : toast.error(data.message)
-    data.succes && setIsEmailSent(true)
+    });
+  };
 
-  }catch(err){
-    toast.error(err.message)
-  }
-}
-const onSubmitOtp = async (e)=> {
-  e.preventDefault();
-  const otpArray = inputRefs.current.map(e=>e.value)
-  setOtp(otpArray.join(''))
-  setIsOtpSubmitted(true)
-}
-const onSubmitNewPassword = async(e)=>{
-  e.preventDefault();
-  try{
-    const {data} = await axios.post(backendUrl +'/api/auth/reset-password' , {email,otp,newPassword})
-    data.succes ? toast.success(data.message) : toast.error(data.message)
-    data.succes && navigate('/login')
-  }catch(err){
-    toast.error(err.message)
-  }
-}
+  const onSubmitEmail = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/auth/send-reset-otp",
+        { email }
+      );
+      data.succes ? toast.success(data.message) : toast.error(data.message);
+      data.succes && setIsEmailSent(true);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const onSubmitOtp = async (e) => {
+    e.preventDefault();
+    const otpArray = inputRefs.current.map((e) => e.value);
+    setOtp(otpArray.join(""));
+    setIsOtpSubmitted(true);
+  };
+
+  const onSubmitNewPassword = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post(
+        backendUrl + "/api/auth/reset-password",
+        {
+          email,
+          otp,
+          newPassword,
+        }
+      );
+      data.succes ? toast.success(data.message) : toast.error(data.message);
+      data.succes && navigate("/login");
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   return (
-    <div className='flex items-center justify-center min-h-screen 
-        bg-gradient-to-br from-blue-200 to-purple-400'>
-          <img onClick={()=>navigate('/')} src={assets.logo} alt="" className='absolute left-5 sm:left-20 top-5 w-28 sm:w-32 cursor-pointer' />
-          {!isEmailSent && 
-          <form onSubmit={onSubmitEmail} className='bg-slate-900 p-8 rounded-lg w-96 text-sm'>
-            <h1 className='text-white text-2xl font-semibold text-center mb-4'>Reset password</h1>
-            <p className='text-center mb-6 text-indigo-300'>Enter your registred email address: </p>
-            <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#333A5C]'>
-              <img src={assets.mail_icon} className='w-3 h-3' alt="" />
-              <input type="email" className='bg-transparent outline-none text-white' placeholder='Email' value={email}
-              onChange={(e) => setEmail(e.target.value)} required />
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#d0f0e9] to-[#f0fdfb] px-4">
+      <div className="bg-white shadow-lg rounded-2xl p-10 max-w-lg w-full">
+        {!isEmailSent && (
+          <form onSubmit={onSubmitEmail} className="space-y-6">
+            <h1 className="text-2xl font-bold text-center text-[#2D6A4F]">
+              Reset Password
+            </h1>
+            <p className="text-sm text-gray-600 text-center">
+              Enter your registered email address:
+            </p>
+            <div className="relative">
+              <Mail className="absolute left-3 top-3 text-gray-400" size={18} />
+              <Input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="pl-10 rounded-full border border-gray-300 shadow-sm"
+              />
             </div>
-            <button className='w-full py-2.5 bg-gradient-to-r from-indigo-500 to-indigo-900 text-white rounded-full mt-3'>Submit</button>
+            <Button
+              type="submit"
+              className="w-full rounded-full bg-[#2D6A4F] text-white hover:bg-[#40916C]"
+            >
+              Submit
+            </Button>
           </form>
-}
-{!isOtpSubmitted && isEmailSent &&
-          <form onSubmit={onSubmitOtp}  className='bg-slate-900 p-8 rounded-lg w-96 text-sm'>
-            <h1 className='text-white text-2xl font-semibold text-center mb-4'>Reset password OTP</h1>
-            <p className='text-center mb-6 text-indigo-300'>Enter the 6-digit code sent to your email : </p>
-            <div onPaste={handlePaste} className='flex justify-between mb-6' >
-              {Array(6).fill(0).map((_,index)=>(
-              <input type="text" maxLength='1' key={index} required
-              className='w-12 h-12 bg-[#333A5C] text-white text-center text-xl rounded-md '
-              ref={e=> inputRefs.current[index] =e }
-              onInput={(e)=>handelInput(e,index)}
-              onKeyDown={(e)=>handleKeyDown(e,index)}/>
-            ))}
-          </div>
-        <button className='w-full py-2.5 bg-gradient-to-r from-indigo-500 to-indigo-900 text-white rounded-full'>Submit</button>
-       </form>
-}
-{isOtpSubmitted && isEmailSent && 
-       <form onSubmit={onSubmitNewPassword}  className='bg-slate-900 p-8 rounded-lg w-96 text-sm'>
-            <h1 className='text-white text-2xl font-semibold text-center mb-4'>New password</h1>
-            <p className='text-center mb-6 text-indigo-300'>Enter your new password below  </p>
-            <div className='mb-4 flex items-center gap-3 w-full px-5 py-2.5 rounded-full bg-[#333A5C]'>
-              <img src={assets.lock_icon} className='w-3 h-3' alt="" />
-              <input type="password" className='bg-transparent outline-none text-white' placeholder='newPassword' value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)} required />
-            </div>
-            <button className='w-full py-2.5 bg-gradient-to-r from-indigo-500 to-indigo-900 text-white rounded-full mt-3'>Submit</button>
-          </form>
-}
-      
-    </div>
-  )
-}
+        )}
 
-export default ResetPassword
+        {!isOtpSubmitted && isEmailSent && (
+          <form onSubmit={onSubmitOtp} className="space-y-6">
+            <h1 className="text-2xl font-bold text-center text-[#2D6A4F]">
+              Enter OTP
+            </h1>
+            <p className="text-sm text-gray-600 text-center">
+              Enter the 6-digit code sent to your email:
+            </p>
+            <div onPaste={handlePaste} className="flex justify-between">
+              {Array(6)
+                .fill(0)
+                .map((_, index) => (
+                  <input
+                    type="text"
+                    maxLength="1"
+                    key={index}
+                    required
+                    className="w-10 h-10 text-center text-xl border border-gray-300 rounded-md shadow-sm"
+                    ref={(el) => (inputRefs.current[index] = el)}
+                    onInput={(e) => handleInput(e, index)}
+                    onKeyDown={(e) => handleKeyDown(e, index)}
+                  />
+                ))}
+            </div>
+            <Button
+              type="submit"
+              className="w-full rounded-full bg-[#2D6A4F] text-white hover:bg-[#40916C]"
+            >
+              Submit
+            </Button>
+          </form>
+        )}
+
+        {isOtpSubmitted && isEmailSent && (
+          <form onSubmit={onSubmitNewPassword} className="space-y-6">
+            <h1 className="text-2xl font-bold text-center text-[#2D6A4F]">
+              New Password
+            </h1>
+            <p className="text-sm text-gray-600 text-center">
+              Enter your new password below:
+            </p>
+            <div className="relative">
+              <Lock className="absolute left-3 top-3 text-gray-400" size={18} />
+              <Input
+                type="password"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+                className="pl-10 rounded-full border border-gray-300 shadow-sm"
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full rounded-full bg-[#2D6A4F] text-white hover:bg-[#40916C]"
+            >
+              Submit
+            </Button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ResetPassword;

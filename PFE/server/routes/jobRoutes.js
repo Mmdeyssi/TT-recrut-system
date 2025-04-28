@@ -6,8 +6,8 @@ import { addJob, deleteJob, editJob, getAdminJobs, getAllJobs, getJobById, getJo
 const jobRouter = express.Router();
 jobRouter.post("/add-job", userAuth,employerCheck, addJob); // Only employers can post jobs
 jobRouter.get("/all-jobs", getJobs); // Anyone can view all jobs
-jobRouter.get("/search-job",userAuth,getAllJobs);
-jobRouter.get("/search-job/:id",userAuth,getJobById)
+jobRouter.get("/search-job",getAllJobs);
+jobRouter.get("/search-job/:id",getJobById)
 jobRouter.get("/admin-jobs",userAuth,employerCheck,getAdminJobs)
 jobRouter.put("/edit-job/:jobId",userAuth,employerCheck,editJob)
 jobRouter.delete("/delete/:jobId", userAuth,employerCheck, deleteJob);//only employer can delete a job

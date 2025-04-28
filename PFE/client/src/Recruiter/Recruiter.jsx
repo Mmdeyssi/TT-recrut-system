@@ -82,7 +82,7 @@ const RecruiterJobList = () => {
                     {job.title}
                   </h2>
                   <p className="text-gray-500 text-sm mt-1">
-                    {job.location} • {job.jobType} • {job.salary} LPA
+                    {job.location} • {job.contractType} • {job.salary} LPA
                   </p>
                 </div>
 

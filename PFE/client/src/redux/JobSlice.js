@@ -36,6 +36,10 @@ const jobSlice = createSlice({
         setFilterQuery: (state, action) => {
             state.filterQuery = action.payload;
         },
+        addAdminJob: (state, action) => {
+            state.allAdminJobs.push(action.payload);
+          },
+          
         deleteJob: (state, action) => {
             state.allAdminJobs = state.allAdminJobs.filter(job => job._id !== action.payload);//remove from all admin jobs
             state.allAppliedJobs = state.allAppliedJobs.filter(job => job._id !== action.payload);//remove from the allapplied jobs 
@@ -52,6 +56,7 @@ export const {
     setSearchedQuery,
     setFilterQuery,
     deleteJob,
+    addAdminJob,
 } = jobSlice.actions;
       
 export default jobSlice.reducer;

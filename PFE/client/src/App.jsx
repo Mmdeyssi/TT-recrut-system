@@ -17,6 +17,7 @@ import { AppContent } from "./context/AppContext";
 import RecruiterJobList from "./Recruiter/Recruiter";
 import ViewApplications from "./Recruiter/viewApplications";
 import Applicants from "./Recruiter/viewApplications";
+import ApplyJob from "./pages/ApplyJob";
 
 const App = () => {
   const { loading } = useContext(AppContent);
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/description/:id" element={<JobDescription />} />
         <Route path="/admin-jobs" element={<RecruiterJobList />} />
         <Route path="/application/:jobId" element={<Applicants />} />
+        <Route path="/apply-job" element={<ApplyJob />} />
       </Routes>
     </div>
   );

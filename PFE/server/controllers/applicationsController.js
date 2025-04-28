@@ -2,52 +2,102 @@ import { Application } from "../models/jobApplicants.js";
 import { Job } from "../models/jobsModel.js";
 import {  STATUS_ACCEPTED_TEMPLATE,STATUS_REJECTED_TEMPLATE} from "../config/emailTemplates.js"
 import { transporter } from "../config/nodemailer.js";
+import PdfParse from "pdf-parse";
+import axios from "axios";
+import fs from "fs/promises";
+import { userModel } from "../models/userModel.js";
 // Controller to apply for a job ✅ 
 export const applyJob = async (req, res) => {
-  try {
+    try {
       const userId = req.user.id;
       const jobId = req.params.id;
+      const { useProfileResume } = req.body;
+  
       if (!jobId) {
-          return res.status(400).json({
-              message: "Job id is required.",
-              success: false
-          })
-      };
-      // check if the user has already applied for the job
-      const existingApplication = await Application.findOne({ job: jobId, applicant: userId });
-
-      if (existingApplication) {
-          return res.json({
-              message: "You have already applied for this jobs",
-              success: false
-          });
+        return res.status(400).json({
+          message: "Job ID is required.",
+          success: false
+        });
       }
-
-      // check if the jobs exists
+  
+      // Check if the user already applied
+      const existingApplication = await Application.findOne({ job: jobId, applicant: userId });
+  
+      if (existingApplication) {
+        return res.json({
+          message: "You have already applied for this job.",
+          success: false
+        });
+      }
+  
+      // Check if the job exists
       const job = await Job.findById(jobId);
       if (!job) {
-          return res.status(404).json({
-              message: "Job not found",
-              success: false
-          })
+        return res.status(404).json({
+          message: "Job not found.",
+          success: false
+        });
       }
-      // create a new application
+  
+      // Handle resume text extraction
+      let extractedText = "";
+  
+      if (useProfileResume === "true" || useProfileResume === true) {
+        // 🔥 Use the user's saved profile resume
+        const user = await userModel.findById(userId);
+        if (!user?.profile?.resume) {
+          return res.status(400).json({
+            message: "No profile resume found. Please upload one first.",
+            success: false
+          });
+        }
+  
+        const resumeUrl = user.profile.resume;
+        const pdfBuffer = await axios.get(resumeUrl, { responseType: "arraybuffer" });
+        const parsedPdf = await PdfParse(Buffer.from(pdfBuffer.data, "binary"));
+        extractedText = parsedPdf.text?.trim().toLowerCase() || "";
+  
+      } else {
+        // 🔥 Parse the newly uploaded resume
+        if (!req.file) {
+          return res.status(400).json({
+            message: "No resume uploaded. Please upload your CV.",
+            success: false
+          });
+        }
+  
+        const pdfBuffer = await fs.readFile(req.file.path);
+        const parsedPdf = await PdfParse(pdfBuffer);
+        extractedText = parsedPdf.text?.trim().toLowerCase() || "";
+      }
+  
+      // Create a new application
       const newApplication = await Application.create({
-          job:jobId,
-          applicant:userId,
+        job: jobId,
+        applicant: userId,
+        status: "pending",
+        extractedText: extractedText,
       });
-
+  
+      // Update the job with this application reference
       await Job.findByIdAndUpdate(jobId, {
         $push: { applications: newApplication._id }
       });
+  
       return res.json({
-          message:"Job applied successfully.",
-          success:true
-      })
-  } catch (error) {
-      console.log(error);
-  }
-};
+        message: "Job applied successfully!",
+        success: true,
+        applicationId: newApplication._id
+      });
+  
+    } catch (error) {
+      console.error("Error in applyJob:", error.message);
+      return res.status(500).json({
+        message: "Server error while applying for the job.",
+        success: false
+      });
+    }
+  };
 export const getAppliedJobs = async (req,res) => {
   try {
       const userId = req.user.id;

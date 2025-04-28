@@ -1,22 +1,68 @@
+import React from "react";
+
 const Footer = () => {
   return (
-    <footer className="bg-white text-gray-800 shadow-lg pb-5 py-4 mt-10">
-      <div className="border-b border-gray-500 w-full my-4 shadow-lg"></div>
-      <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center text-sm">
-        <p className="font-semibold">
-          &copy; {new Date().getFullYear()} TT Recrut System
-        </p>
-        <div className="flex space-x-4 mt-2 sm:mt-0">
-          <a href="/about" className="hover:underline">
-            About
-          </a>
-          <a href="/contact" className="hover:underline">
-            Contact
-          </a>
-          <a href="/privacy" className="hover:underline">
-            Privacy
-          </a>
+    <footer className="bg-gray-100 py-8 px-6 sm:px-24">
+      <div className="max-w-screen-xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6">
+        {/* Logo and Description */}
+        <div>
+          <img src="logo_url_here" alt="TT Logo" className="w-24 mb-4" />
+          <p className="text-gray-700 text-sm">
+            Empowering Tunisia Telecom with smart hiring solutions. Simplifying
+            recruitment with AI-driven tools.
+          </p>
         </div>
+
+        {/* Quick Links */}
+        <div>
+          <h4 className="text-gray-900 font-semibold mb-4">Quick Links</h4>
+          <ul className="text-gray-700 text-sm space-y-2">
+            <li>
+              <a href="/about" className="hover:text-blue-600">
+                About Us
+              </a>
+            </li>
+            <li>
+              <a href="/jobs" className="hover:text-blue-600">
+                Job Openings
+              </a>
+            </li>
+            <li>
+              <a href="/contact" className="hover:text-blue-600">
+                Contact Us
+              </a>
+            </li>
+            <li>
+              <a href="/privacy" className="hover:text-blue-600">
+                Privacy Policy
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        {/* Contact Information */}
+        <div>
+          <h4 className="text-gray-900 font-semibold mb-4">Contact Us</h4>
+          <ul className="text-gray-700 text-sm space-y-2">
+            <li>
+              📧{" "}
+              <a
+                href="mailto:support@ttrecruitsystem.com"
+                className="hover:text-blue-600"
+              >
+                support@ttrecruitsystem.com
+              </a>
+            </li>
+            <li>📞 +216 123 456 789</li>
+            <li>📍 Tunisia Telecom Headquarters, Tunis</li>
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-gray-300 mt-8 pt-4 text-center">
+        <p className="text-gray-600 text-sm">
+          © {new Date().getFullYear()} TT Recruit System. All rights reserved.
+        </p>
       </div>
     </footer>
   );

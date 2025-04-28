@@ -25,9 +25,6 @@ const Job = ({ job }) => {
             ? "Today"
             : `${daysAgoFunction(job?.createdAt)} days ago`}
         </p>
-        <Button variant="outline" className="rounded-full" size="icon">
-          <Bookmark />
-        </Button>
       </div>
 
       {/* Company Info */}
@@ -52,12 +49,9 @@ const Job = ({ job }) => {
       </div>
 
       {/* Badges */}
-      <div className="flex items-center gap-2 whitespace-nowrap overflow-hidden text-ellipsis mb-4">
-        <Badge className="text-blue-700 font-bold" variant="ghost">
-          {job?.position} Positions
-        </Badge>
+      <div className="flex items-center gap-2 whitespace-nowrap overflow-hidden text-ellipsis ">
         <Badge className="text-[#F83002] font-bold" variant="ghost">
-          {job?.jobType}
+          {job?.contractType}
         </Badge>
         <Badge className="text-[#7209b7] font-bold" variant="ghost">
           {job?.salary} DNT
@@ -65,7 +59,7 @@ const Job = ({ job }) => {
       </div>
 
       {/* Action Buttons */}
-      <div className="flex items-center gap-4 mt-auto">
+      <div className="flex items-center gap-4 mt-4 mb-4">
         <Button
           onClick={() => navigate(`/description/${job._id}`)}
           variant="outline"

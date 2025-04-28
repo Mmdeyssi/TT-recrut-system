@@ -14,7 +14,7 @@ import { Loader2 } from "lucide-react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { setAllJobs } from "@/redux/JobSlice";
+import { addAdminJob, setAllJobs } from "@/redux/JobSlice";
 
 const AddJobModal = ({ open, setOpen }) => {
   const { backendUrl } = useContext(AppContent);
@@ -26,9 +26,9 @@ const AddJobModal = ({ open, setOpen }) => {
     description: "",
     skillsRequired: "",
     salary: "",
-    position: "",
+
     location: "",
-    jobType: "",
+    contractType: "",
     experience: "",
   });
 
@@ -44,9 +44,9 @@ const AddJobModal = ({ open, setOpen }) => {
       description,
       skillsRequired,
       salary,
-      position,
+
       location,
-      jobType,
+      contractType,
       experience,
     } = formData;
 
@@ -55,9 +55,8 @@ const AddJobModal = ({ open, setOpen }) => {
       !description ||
       !skillsRequired ||
       !salary ||
-      !position ||
       !location ||
-      !jobType ||
+      !contractType ||
       !experience
     ) {
       return toast.error("Please fill all fields");
@@ -78,18 +77,17 @@ const AddJobModal = ({ open, setOpen }) => {
         toast.success("Job added successfully!");
         setOpen(false);
 
-        dispatch(setAllJobs([data.job]));
-
         setFormData({
           title: "",
           description: "",
           skillsRequired: "",
           salary: "",
-          position: "",
+
           location: "",
-          jobType: "",
+          contractType: "",
           experience: "",
         });
+        dispatch(addAdminJob(data.job));
       } else {
         toast.error(data.message);
       }
@@ -122,9 +120,9 @@ const AddJobModal = ({ open, setOpen }) => {
               label: "Skills (comma separated)",
             },
             { name: "salary", type: "number", label: "Salary (in DNT)" },
-            { name: "position", type: "number", label: "No. of Positions" },
+
             { name: "location", type: "text", label: "Location" },
-            { name: "jobType", type: "text", label: "Job Type" },
+            { name: "contractType", type: "text", label: "Contract Type" },
             {
               name: "experience",
               type: "number",

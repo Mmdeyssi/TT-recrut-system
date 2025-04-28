@@ -21,9 +21,9 @@ const EditJobModal = ({ open, setOpen }) => {
     description: "",
     location: "",
     salary: "",
-    jobType: "",
+    contractType: "",
     experienceLevel: "",
-    position: "",
+
     skillsRequired: "",
   });
 
@@ -34,9 +34,9 @@ const EditJobModal = ({ open, setOpen }) => {
         description: singleJob.description || "",
         location: singleJob.location || "",
         salary: singleJob.salary || "",
-        jobType: singleJob.jobType || "",
+        contractType: singleJob.contractType || "",
         experienceLevel: singleJob.experienceLevel || "",
-        position: singleJob.position || "",
+
         skillsRequired: singleJob.skillsRequired?.join(", ") || "",
       });
     }
@@ -96,9 +96,9 @@ const EditJobModal = ({ open, setOpen }) => {
               "description",
               "location",
               "salary",
-              "jobType",
+              "contractType",
               "experienceLevel",
-              "position",
+
               "skillsRequired",
             ].map((field) => (
               <div key={field} className="flex flex-col gap-1">

@@ -6,10 +6,10 @@ import { Job } from "../models/jobsModel.js";
 // Controller to add a new job ✅ 
 export const addJob = async (req, res) => {
   try {
-    const { title, description, skillsRequired,salary, location, jobType, experience,position } = req.body;
-    const employerId =  req.user.id;// Extract employer ID from authenticated user
+    const { title, description, skillsRequired,salary, location, contractType, experience } = req.body;
+    const employerId =  req.user.id; // Extract employer ID from authenticated user
 
-    if (!title || !description || !skillsRequired || !salary || !location || !jobType || !experience || !position ) {
+    if (!title || !description || !skillsRequired || !salary || !location || !contractType || !experience ) {
       return res.json({ success: false, message: "All fields are required" });
     }
 
@@ -18,10 +18,10 @@ export const addJob = async (req, res) => {
       description,
       skillsRequired: skillsRequired,
       salary: Number(salary),
-      position:Number(position),
+    
       location,
       experienceLevel: experience,
-      jobType : jobType,
+      contractType : contractType,
       created_by: employerId
   });   
  
@@ -43,12 +43,7 @@ export const getAllJobs = async (req, res) => {
           ]
       };
       const jobs = await Job.find(query).sort({ createdAt: -1 });
-      if (!jobs) {
-          return res.status(404).json({
-              message: "Jobs not found.",
-              success: false
-          })
-      };
+
       return res.status(200).json({
           jobs,
           success: true
@@ -119,9 +114,9 @@ export const editJob = async (req, res) => {
       description,
       skillsRequired,
       salary,
-      position,
+      
       location,
-      jobType,
+      contractType,
       experienceLevel
     } = req.body;
     
@@ -146,9 +141,9 @@ export const editJob = async (req, res) => {
       ? skillsRequired
       : skillsRequired.split(",");
     if(salary) job.salary = salary;
-    if(position) job.position = position;
+   
     if(location) job.location = location;
-    if(jobType) job.jobType = jobType;
+    if(contractType) job.contractType = contractType;
     if(experienceLevel) job.experienceLevel = experienceLevel;
 
     await job.save();

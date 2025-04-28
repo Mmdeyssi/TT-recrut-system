@@ -36,7 +36,7 @@ const Jobs = () => {
     if (Array.isArray(filterQuery) && filterQuery.length > 0) {
       jobs = jobs.filter((job) => {
         const matches = filterQuery.every((filter) =>
-          [job.title, job.location, job.jobType, String(job.salary)]
+          [job.title, job.location, job.contractType, String(job.salary)]
             .map((x) => x?.toLowerCase())
             .includes(filter.toLowerCase())
         );

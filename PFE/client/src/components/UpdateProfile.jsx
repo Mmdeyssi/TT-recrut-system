@@ -15,8 +15,8 @@ const UpdateProfile = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
   const { userData, backendUrl, setUserData } = useContext(AppContent);
   const [input, setInput] = useState({
-    fullName: userData?.name || "",
-    email: userData?.mail || "",
+    fullName: userData?.fullName || "",
+    email: userData?.email || "",
     phone: userData?.phone || "",
     bio: userData?.profile?.bio || "",
     skills: userData?.profile?.skills?.map((skill) => skill) || "",
@@ -48,7 +48,7 @@ const UpdateProfile = ({ open, setOpen }) => {
 
     try {
       setLoading(true);
-      const { data } = await axios.post(
+      const { data } = await axios.put(
         backendUrl + "/api/user/update/profile", // Correct API route
         formData,
         {
@@ -60,10 +60,18 @@ const UpdateProfile = ({ open, setOpen }) => {
       );
 
       if (data.success) {
-        setUserData(data.user); // Update Redux store with new user info
-        toast.success(data.message);
+        setUserData({
+          name: data.user.fullName,
+          mail: data.user.email,
+          phone: data.user.phone,
+          role: data.user.role,
+          isVerified: data.user.isVerified,
+          userId: data.user._id,
+          profile: {
+            ...data.user.profile,
+          },
+        });
       }
-      window.location.reload();
     } catch (error) {
       toast.error(error || "Update failed");
     } finally {

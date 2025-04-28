@@ -90,7 +90,7 @@ const LandingPage = () => {
             />
             <button
               onClick={searchJobHandler}
-              className="bg-blue-600 hover:bg-blue-700 text-white text-sm sm:text-base font-semibold px-6 py-2 rounded-full shadow transition-all"
+              className="bg-green-400 text-white font-semibold px-6 py-2 rounded-full shadow transition-all"
             >
               Search
             </button>

@@ -31,3 +31,8 @@ If you're already using Firebase for authentication or database, or need scalabi
 Since your project is already using MongoDB and MERN stack, Firebase might not be a natural fit unless you integrate it separately. If you want a quick and easy solution, go for NativeNotify. If you prefer full control and scalability, use Firebase FCM.
 
 Would you like a step-by-step guide for implementation?
+
+📌Why extracted text filed in the application schema ?
+we put extractedText of the resumes in the application schema instead of the user schema so when a user change his resume in the cv matching score will not get the new resume but the resume that he already applied with
+-> If you want to show resume matching: fetch extractedText from Application, NOT from User profile
+You move the extracted resume from being part of the User's global profile to being part of each individual Application record, making your system cleaner, safer, faster, and more professional.

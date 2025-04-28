@@ -49,22 +49,41 @@ its MIME (Multipurpose Internet Mail Extensions) format. */
   
   export const extractPdfText = async (req, res, next) => {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: "No file uploaded" });
+      return next(); // No file uploaded, skip extraction
     }
   
     try {
-      const pdfPath = req.file.path; // Get the uploaded file path
-  
-      // Read the PDF file
+      const pdfPath = req.file.path;
       const dataBuffer = await fs.readFile(pdfPath);
       const pdfData = await pdfParse(dataBuffer);
+      const text = pdfData.text || "";
   
-      // Store extracted text in request object
-      req.body.extractedText = pdfData.text.trim();
+      const cleanedText = text
+        .replace(/\r\n|\n|\r/g, " ")  // Remove line breaks
+        .replace(/\s+/g, " ")         // Collapse multiple spaces
+        .replace(/[^\w\s.,:;!?@%&()-]/g, "") // Keep punctuation
+        .trim()
+        .toLowerCase();               // normalize to lowercase
   
-      next(); // Pass control to next middleware
+      req.body.extractedText = cleanedText;
+  
+      next(); // Move on to the next handler
     } catch (error) {
-      console.error("PDF Extraction Error:", error);
-      return res.status(500).json({ success: false, message: "Failed to extract text from PDF" });
+      console.error("Error extracting PDF text:", error.message);
+  
+      // ✨ Optional: Clean up file if error happens
+      if (req.file?.path) {
+        try {
+          await fs.unlink(req.file.path); // delete uploaded file if error
+        } catch (cleanupError) {
+          console.error("Error deleting file after failure:", cleanupError.message);
+        }
+      }
+  
+      return res.status(500).json({
+        success: false,
+        message: "Failed to extract text from resume PDF",
+      });
     }
   };
+  

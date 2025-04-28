@@ -1,3 +1,4 @@
+import ApplyJobModal from "@/components/ApplyJobModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AppContent } from "@/context/AppContext";
@@ -11,65 +12,69 @@ import { toast } from "react-toastify";
 const JobDescription = () => {
   const { backendUrl, userData } = useContext(AppContent);
   const { singleJob } = useSelector((store) => store.job);
+  const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+
   const dispatch = useDispatch();
   const { id: jobId } = useParams();
   const [isApplied, setIsApplied] = useState(false);
   const navigate = useNavigate();
-
-  const applyJobHandler = async () => {
+  const fetchSingleJob = async () => {
+    setLoading(true);
     try {
-      const { data } = await axios.post(
-        `${backendUrl}/api/application/apply-job/${jobId}`,
-        null,
+      const { data } = await axios.get(
+        `${backendUrl}/api/jobs/search-job/${jobId}`,
         { withCredentials: true }
       );
 
       if (data.success) {
-        const updatedSingleJob = {
-          ...singleJob,
-          applications: [
-            ...singleJob.applications,
-            { applicant: userData?._id },
-          ],
-        };
-        dispatch(setSingleJob(updatedSingleJob));
-        setIsApplied(true);
-        toast.success(data.message);
-      } else {
-        toast.error(data.message);
+        dispatch(setSingleJob(data.job));
+
+        if (userData?.userId) {
+          const applied = data.job.applications.some(
+            (application) =>
+              application.applicant?.toString() === userData?.userId?.toString()
+          );
+          setIsApplied(applied);
+        }
       }
     } catch (error) {
-      toast.error("Error applying for job");
+      toast.error("Error fetching job:", error.message);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
-
   useEffect(() => {
-    const fetchSingleJob = async () => {
-      try {
-        const { data } = await axios.get(
-          `${backendUrl}/api/jobs/search-job/${jobId}`,
-          { withCredentials: true }
-        );
-
-        if (data.success) {
-          dispatch(setSingleJob(data.job));
-
-          if (userData?.userId) {
-            const applied = data.job.applications.some(
-              (application) =>
-                application.applicant?.toString() ===
-                userData?.userId?.toString()
-            );
-            setIsApplied(applied);
-          }
-        }
-      } catch (error) {
-        console.log("Error fetching job:", error.message);
-      }
-    };
-
     fetchSingleJob();
   }, [jobId, dispatch, userData?._id]);
+  if (loading || !singleJob) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[40vh] text-center animate-pulse text-gray-600">
+        <svg
+          className="w-12 h-12 text-indigo-500 mb-4 animate-spin"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          ></circle>
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+          ></path>
+        </svg>
+        <p className="text-lg font-medium">Loading job description...</p>
+        <p className="text-sm text-gray-400">Please wait a moment</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 my-10">
@@ -90,11 +95,8 @@ const JobDescription = () => {
             {singleJob?.title}
           </h1>
           <div className="flex flex-wrap items-center gap-2">
-            <Badge className="text-blue-700 font-bold" variant="ghost">
-              {singleJob?.position} Positions
-            </Badge>
             <Badge className="text-[#F83002] font-bold" variant="ghost">
-              {singleJob?.jobType}
+              {singleJob?.contractType}
             </Badge>
             <Badge className="text-[#7209b7] font-bold" variant="ghost">
               {singleJob?.salary} DNT
@@ -102,17 +104,29 @@ const JobDescription = () => {
           </div>
         </div>
 
-        <Button
-          onClick={isApplied ? null : applyJobHandler}
-          disabled={isApplied}
-          className={`w-full md:w-auto rounded-lg mt-4 md:mt-0 ${
-            isApplied
-              ? "bg-gray-500 cursor-not-allowed"
-              : "bg-[#7209b7] hover:bg-[#5f32ad]"
-          }`}
-        >
-          {isApplied ? "Already Applied" : "Apply Now"}
-        </Button>
+        {userData?.role === "jobSeeker" && (
+          <Button
+            onClick={() => setOpenModal(true)}
+            disabled={isApplied}
+            className={`w-full md:w-auto rounded-lg mt-4 md:mt-0 ${
+              isApplied
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-[#7209b7] hover:bg-[#5f32ad]"
+            }`}
+          >
+            {isApplied ? "Already Applied" : "Apply Now"}
+          </Button>
+        )}
+        <ApplyJobModal
+          open={openModal}
+          setOpen={setOpenModal}
+          jobId={singleJob?._id}
+          jobTitle={singleJob?.title}
+          jobDescription={singleJob?.description}
+          singleJob={singleJob}
+          userData={userData}
+          dispatch={dispatch} // 🔥 pass dispatch
+        />
       </div>
 
       {/* Separator */}
@@ -134,6 +148,9 @@ const JobDescription = () => {
         </p>
         <p>
           <strong>Salary:</strong> {singleJob?.salary} DNT
+        </p>
+        <p>
+          <strong>Contract:</strong> {singleJob?.contractType}
         </p>
 
         {/* ✅ Skills Required */}

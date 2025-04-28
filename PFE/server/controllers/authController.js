@@ -147,10 +147,11 @@ export const updateProfile = async (req, res) => {
         
         // resume comes later here...
         if (req.file) {
-            user.profile.resume = `http://localhost:4000/${req.file.path}`; // Save resume file path
-            console.log(req.file.path)
-            user.profile.resumeOriginalName = req.file.originalname; // Save original filename
-        }
+            user.profile.resume = `http://localhost:4000/${req.file.path}`;
+            user.profile.resumeOriginalName = req.file.originalname;
+           
+          }
+          
 
 
         await user.save();
