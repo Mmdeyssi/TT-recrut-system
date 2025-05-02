@@ -7,7 +7,7 @@ import { setFilterQuery } from "@/redux/JobSlice";
 const filterData = [
   {
     filterType: "Location",
-    array: ["Tunisia", "Tunisia Cun", "Nabeul", "Sousse", "Gabes"],
+    array: ["Tunisia", "Nabeul", "Sousse", "Gabes"],
   },
   {
     filterType: "Industry",
@@ -16,7 +16,7 @@ const filterData = [
       "Backend Developer",
       "FullStack Developer",
       "Embedded Developer",
-      "IOT",
+      "IoT Engineer",
     ],
   },
 ];

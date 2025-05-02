@@ -1,0 +1,28 @@
+MULTER ??
+When a user wants to:
+
+    Upload a resume (PDF) 📄
+
+    Upload a profile image 🖼️
+
+We need to:
+
+    Accept it ✅
+
+    Validate it (PDF? Image?) 🔍
+
+    Save it in the right spot 🗂️
+
+And Multer handles all that.
+Multer is just one of these helpers (middleware) — but it's special because it:
+
+    Parses multipart/form-data (used for file uploads)
+
+    Saves the uploaded files (to memory or disk)
+
+    Adds req.file or req.files to your request
+
+MULTER VS MIDDELWARE
+-> Middleware is a concept — it’s any function that runs between a request and a response.
+
+Multer is a specific middleware that handles file uploads.

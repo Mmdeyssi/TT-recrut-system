@@ -36,3 +36,51 @@ Would you like a step-by-step guide for implementation?
 we put extractedText of the resumes in the application schema instead of the user schema so when a user change his resume in the cv matching score will not get the new resume but the resume that he already applied with
 -> If you want to show resume matching: fetch extractedText from Application, NOT from User profile
 You move the extracted resume from being part of the User's global profile to being part of each individual Application record, making your system cleaner, safer, faster, and more professional.
+
+✅ Why It's Good to Store:
+📄 CVs on Disk
+🖼️ Images in Cloud
+🧠 1. CVs (PDFs) → Store on Disk
+
+You said:
+
+    "Later I will parse them and compare them to something else thanks to an AI model."
+
+That means:
+
+    You'll need fast, direct access to the CV files
+
+    You’ll want to read, extract, and analyze their content
+
+    Possibly using pdf-parse, PyMuPDF, or feeding them into an NLP model
+
+✅ Storing CVs on disk is best because:
+
+    You avoid the time delay of downloading from cloud storage
+
+    You have local access to read and extract text immediately
+
+    You can clean them up after processing (if needed)
+
+📷 2. Profile Photos → Store in Cloud (like Cloudinary)
+
+These files:
+
+    Are only used for display (e.g. avatar on profile)
+
+    Aren’t processed or analyzed
+
+    Can be served to the frontend via a URL
+
+✅ Storing images in the cloud is better because:
+
+    Cloudinary optimizes images for performance (resizing, compression)
+
+    You save disk space
+
+    You can easily change or scale image delivery later.
+    | File Type | Where You're Storing It | Why It's Good                                |
+
+| --------- | ----------------------- | -------------------------------------------- |
+| CV (PDF) | 🖥️ Local Disk | You’ll _read it_, _analyze it_, _process it_ |
+| Image | ☁️ Cloud (Cloudinary) | You’ll just _show it_ on the screen |

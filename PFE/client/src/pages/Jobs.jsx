@@ -33,14 +33,17 @@ const Jobs = () => {
     }
 
     // 2. Filter by checkboxes (filterQuery)
-    if (Array.isArray(filterQuery) && filterQuery.length > 0) {
+    if (selectedFilters && Object.keys(selectedFilters).length > 0) {
       jobs = jobs.filter((job) => {
-        const matches = filterQuery.every((filter) =>
-          [job.title, job.location, job.contractType, String(job.salary)]
-            .map((x) => x?.toLowerCase())
-            .includes(filter.toLowerCase())
-        );
-        return matches;
+        return Object.entries(selectedFilters).every(([filterType, values]) => {
+          if (filterType === "Location") {
+            return values.includes(job.location);
+          }
+          if (filterType === "Industry") {
+            return values.includes(job.title);
+          }
+          return true;
+        });
       });
     }
 
