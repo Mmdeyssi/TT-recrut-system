@@ -124,56 +124,48 @@ export const isAuthenticated =async(req,res)=>{
         res.json({succes:false,message:err.message})
     }
 }
+
 export const updateProfile = async (req, res) => {
-    try {
-        const { fullName, email, phone, bio, skills } = req.body;
-        
-        const formattedSkills = Array.isArray(skills) ? skills : skills.split(",").map(skill => skill.trim());
-        const userId = req.user.id; // middleware authentication
-        let user = await userModel.findById(userId);
+  try {
+    const { fullName, email, phone, bio, skills } = req.body;
+    const formattedSkills = Array.isArray(skills)
+      ? skills
+      : skills.split(",").map((s) => s.trim());
+    const userId = req.user.id;
+    let user = await userModel.findById(userId);
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
-        if (!user) {
-            return res.status(400).json({
-                message: "User not found.",
-                success: false
-            })
-        }
-        // updating data
-        if(fullName) user.fullName = fullName
-        if(email) user.email = email
-        if(phone)  user.phone = phone
-        if(bio) user.profile.bio = bio
-        if(skills) user.profile.skills = formattedSkills
-        
-        // resume comes later here...
-        if (req.file) {
-            user.profile.resume = `http://localhost:4000/${req.file.path}`;
-            user.profile.resumeOriginalName = req.file.originalname;
-           
-          }
-          
+    if (fullName) user.fullName = fullName;
+    if (email) user.email = email;
+    if (phone) user.phone = phone;
+    if (bio) user.profile.bio = bio;
+    if (skills) user.profile.skills = formattedSkills;
 
-
-        await user.save();
-
-        user = {
-            _id: user._id,
-            fullName: user.fullName,
-            email: user.email,
-            phone: user.phone,
-            role: user.role,
-            profile: user.profile
-        }
-
-        return res.status(200).json({
-            message:"Profile updated successfully.",
-            user,
-            success:true
-        })
-    } catch (error) {
-        console.log(error);
+    if (req.files?.resume) {
+      const resumeFile = req.files.resume[0];
+      user.profile.resume = `http://localhost:4000/uploads/cvs/${resumeFile.originalname}`;
+      user.profile.resumeOriginalName = resumeFile.originalname;
     }
-}
+
+    if (req.files?.profilePhoto) {
+      const fileUri = getDataUri(req.files.profilePhoto[0]);
+      const cloudUpload = await cloudinary.uploader.upload(fileUri.content);
+      user.profile.profilePhoto = cloudUpload.secure_url;
+    }
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (error) {
+    console.error("Profile update error:", error.message);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 //send verification OTP to the user's Email
 export const sendVerifyOtp = async(req,res)=>{
     try{

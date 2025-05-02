@@ -3,7 +3,8 @@ path → Helps manage file extensions and directory paths.*/
 import multer from "multer";
 import pdfParse from "pdf-parse";
 import fs from "fs/promises";
-
+import path from "path";
+import { createWriteStream } from "fs";
 
 /*destination → Defines where the uploaded files will be stored.
 Saves CVs in the uploads/cvs/ directory.
@@ -14,35 +15,79 @@ Extracts the file’s original extension using path.extname(file.originalname)*/
 what happens next in the file storage process*/ 
 
 
-const storage = multer.diskStorage({
-    destination :   (req, file, cb)=> {
-      cb(null, "uploads/cvs/"); // Save CVs in the 'uploads/cvs/' directory
-    },
-      filename: (req, file, cb) => {
-        // Extract file extension and rename file correctly
-       // const ext = file.mimetype.split("/")[1]; // Get file type (pdf, png, etc.)
-        cb(null, `${Date.now()}-${file.originalname}`);
-      },
-    });
 
-/*mimetype is a property of the uploaded file in Multer that identifies the file type based on 
-its MIME (Multipurpose Internet Mail Extensions) format. */
-  const fileFilter = (req, file, cb) => {
-    const allowedFileTypes = ["application/pdf"];
-    if (allowedFileTypes.includes(file.mimetype)) {
-      cb(null, true);
+
+// ✅ Memory storage for profile images
+const storageImage = multer.memoryStorage();
+
+// ✅ File type filter for images and PDFs
+const fileFilter = (req, file, cb) => {
+  const allowedMimeTypes = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+    "image/webp",
+  ];
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid file type"), false);
+  }
+};
+const customStorage = {
+  _handleFile(req, file, cb) {
+    if (file.fieldname === "resume") {
+      // Use diskStorage manually
+      const filename = `${Date.now()}-${file.originalname}`;
+      const filepath = path.join("uploads/cvs", filename);
+      const outStream = createWriteStream(filepath);
+
+      file.stream.pipe(outStream);
+      outStream.on("error", cb);
+      outStream.on("finish", () => {
+        cb(null, {
+          path: filepath,
+          filename,
+        });
+      });
+    } else if (file.fieldname === "profilePhoto") {
+      // Use memoryStorage manually
+      const chunks = [];
+      file.stream.on("data", (chunk) => chunks.push(chunk));
+      file.stream.on("end", () => {
+        cb(null, {
+          buffer: Buffer.concat(chunks),
+        });
+      });
     } else {
-      cb(new Error("Invalid file type. Only PDF Files are allowed."), false);
+      cb(new Error("Unexpected field"));
     }
-  };
-  export const upload = multer({
-    storage: storage,
-    fileFilter: fileFilter,
-    limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
-  });
+  },
+  _removeFile(req, file, cb) {
+    cb(null);
+  },
+};
 
-  const storageImage = multer.memoryStorage();
-  export const singleUpload = multer({storageImage});
+// ✅ Middleware for profile photo only (Cloudinary)
+export const singleUpload = multer({
+  storage: storageImage,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+});
+
+// ✅ Middleware for both resume and profile image in one request
+export const upload = multer({
+  storage: customStorage, // This will be overridden in controller logic or used only for images
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 },
+}).fields([
+  { name: "resume", maxCount: 1 },
+  { name: "profilePhoto", maxCount: 1 },
+]);
+
+
+
   // Middleware to extract text from PDF
 
   

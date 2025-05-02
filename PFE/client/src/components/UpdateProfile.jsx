@@ -14,6 +14,8 @@ import { Loader2 } from "lucide-react";
 const UpdateProfile = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
   const { userData, backendUrl, setUserData } = useContext(AppContent);
+  const [photo, setPhoto] = useState(null);
+
   const [input, setInput] = useState({
     fullName: userData?.fullName || "",
     email: userData?.email || "",
@@ -43,7 +45,10 @@ const UpdateProfile = ({ open, setOpen }) => {
     formData.append("skills", input.skills);
 
     if (input.file) {
-      formData.append("resume", input.file); // Ensure "resume" matches `upload.single("resume")`
+      formData.append("resume", input.file); // Ensure "resume" matches upload.single("resume")
+    }
+    if (photo) {
+      formData.append("profilePhoto", photo);
     }
 
     try {
@@ -121,6 +126,20 @@ const UpdateProfile = ({ open, setOpen }) => {
                 className="p-2 border rounded-md"
               />
             </div>
+            <div className="flex flex-col gap-1">
+              <Label htmlFor="photo" className="text-sm font-medium">
+                Profile Image
+              </Label>
+              <Input
+                id="photo"
+                name="profilePhoto"
+                type="file"
+                accept="image/*"
+                onChange={(e) => setPhoto(e.target.files[0])}
+                className="p-2 border rounded-md"
+              />
+            </div>
+
             <DialogFooter className="flex flex-col sm:flex-row gap-3 sm:justify-end mt-4">
               {loading ? (
                 <Button disabled className="w-full sm:w-auto">

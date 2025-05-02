@@ -49,7 +49,11 @@ const AuthModal = ({ open, setOpen }) => {
       formData.append("phone", phone);
       formData.append("role", role);
       formData.append("recruiterCode", recruiterCode);
-      formData.append("profilePhoto", photo);
+      if (photo) {
+        formData.append("profilePhoto", photo);
+      }
+      console.log("📸 File to upload:", photo);
+
       if (state === "Sign Up") {
         setLoading(true);
         const { data } = await axios.post(
@@ -94,16 +98,6 @@ const AuthModal = ({ open, setOpen }) => {
       toast.error(err.message);
     } finally {
       setLoading(false);
-    }
-  };
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-
-    if (file && file.type.startsWith("image/")) {
-      setPhoto(file);
-    } else {
-      alert("Only image files are allowed.");
-      setPhoto(null);
     }
   };
 
@@ -259,8 +253,9 @@ const AuthModal = ({ open, setOpen }) => {
 
                 <input
                   type="file"
+                  name="profilePhoto"
                   accept="image/*"
-                  onChange={handleFileChange}
+                  onChange={(e) => setPhoto(e.target.files[0])}
                   className="w-full h-12 text-sm px-4 py-2 rounded-full border border-gray-200"
                 />
               </>
