@@ -15,7 +15,16 @@ Extracts the file’s original extension using path.extname(file.originalname)*/
 what happens next in the file storage process*/ 
 
 
-
+const storageResume = multer.diskStorage({
+  destination :   (req, file, cb)=> {
+    cb(null, "uploads/cvs/"); // Save CVs in the 'uploads/cvs/' directory
+  },
+    filename: (req, file, cb) => {
+      // Extract file extension and rename file correctly
+     // const ext = file.mimetype.split("/")[1]; // Get file type (pdf, png, etc.)
+      cb(null, `${Date.now()}-${file.originalname}`);
+    },
+  });
 
 // ✅ Memory storage for profile images
 const storageImage = multer.memoryStorage();
@@ -75,6 +84,12 @@ export const singleUpload = multer({
   fileFilter,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
 });
+export const resumeUpload = multer({
+  storage: storageResume,
+  fileFilter,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+});
+
 
 // ✅ Middleware for both resume and profile image in one request
 export const upload = multer({

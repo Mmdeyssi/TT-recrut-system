@@ -6,10 +6,12 @@ import ResumeChoice from "@/components/ResumeChoice";
 import { AppContent } from "@/context/AppContext";
 
 const ApplyJob = ({ jobId, jobTitle, jobDescription, onSuccess }) => {
+  const { backendUrl } = useContext(AppContent);
+
   const [useProfileResume, setUseProfileResume] = useState(true);
   const [cv, setCv] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { backendUrl } = useContext(AppContent);
+  const [success, setSuccess] = useState(false); // ✅ Trigger success UI
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -28,7 +30,7 @@ const ApplyJob = ({ jobId, jobTitle, jobDescription, onSuccess }) => {
     const formData = new FormData();
     formData.append("useProfileResume", useProfileResume);
     if (!useProfileResume && cv) {
-      formData.append("cv", cv); // Append uploaded resume
+      formData.append("resume", cv); // Append file if new resume
     }
 
     try {
@@ -43,28 +45,49 @@ const ApplyJob = ({ jobId, jobTitle, jobDescription, onSuccess }) => {
 
       if (data.success) {
         toast.success(data.message);
-        if (onSuccess) {
-          onSuccess();
-        } // ✅ Call parent success handler (close modal, mark applied)
+        setSuccess(true); // ✅ Show Thank You
+
+        // Close modal after 2s
+        setTimeout(() => {
+          if (onSuccess) onSuccess();
+        }, 2000);
       } else {
         toast.error(data.message);
       }
-    } catch (error) {
+    } catch (err) {
       toast.error("Error submitting application.");
     } finally {
       setLoading(false);
     }
   };
 
+  // ✅ Thank You Message
+  if (success) {
+    return (
+      <div className="text-center py-10 transition-opacity duration-500 opacity-100">
+        <h2 className="text-2xl font-bold text-green-600 mb-4">
+          🎉 Thank you for applying!
+        </h2>
+        <p className="text-gray-600">
+          We’ve received your application for <strong>{jobTitle}</strong>.
+        </p>
+        <p className="text-sm text-gray-500 mt-2">
+          The recruiter will review your resume soon.
+        </p>
+      </div>
+    );
+  }
+
+  // ✅ Main Form UI
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-      {/* Resume choice */}
+      {/* Resume option cards */}
       <ResumeChoice
         useProfileResume={useProfileResume}
         setUseProfileResume={setUseProfileResume}
       />
 
-      {/* Upload new file input */}
+      {/* Upload input (conditionally shown) */}
       {!useProfileResume && (
         <div>
           <label className="block text-md font-medium mb-2">
@@ -79,7 +102,7 @@ const ApplyJob = ({ jobId, jobTitle, jobDescription, onSuccess }) => {
         </div>
       )}
 
-      {/* Submit button */}
+      {/* Submit Button with Spinner */}
       <button
         type="submit"
         disabled={loading}
